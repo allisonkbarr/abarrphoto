@@ -1,0 +1,15 @@
+{
+  "name": "governorjs",
+  "version": "0.0.2",
+  "description": "State manager courtesy of React.addons.update",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ramda": "^0.10.0",
+    "react": "^0.12.2"
+  }
+}

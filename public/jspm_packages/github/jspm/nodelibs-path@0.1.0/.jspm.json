@@ -1,0 +1,16 @@
+{
+  "registry": "npm",
+  "jspm": {
+    "registry": "npm"
+  },
+  "format": "cjs",
+  "ignore": [
+    "node_modules"
+  ],
+  "map": {
+    "undefined": "./index"
+  },
+  "dependencies": {
+    "path-browserify": "path-browserify@0.0.0"
+  }
+}

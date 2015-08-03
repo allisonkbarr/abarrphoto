@@ -1,0 +1,39 @@
+{
+  "name": "governorjs",
+  "version": "0.0.3",
+  "description": "State manager courtesy of React.addons.update",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "_id": "governorjs@0.0.3",
+  "dist": {
+    "shasum": "1bd8e15d786ef4220e8329c564ae67fb34913097",
+    "tarball": "http://registry.npmjs.org/governorjs/-/governorjs-0.0.3.tgz"
+  },
+  "_from": ".",
+  "_npmVersion": "1.4.6",
+  "_npmUser": {
+    "name": "bbarr",
+    "email": "bbarr1384@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "bbarr",
+      "email": "bbarr1384@gmail.com"
+    }
+  ],
+  "jspm": {},
+  "registry": "npm",
+  "format": "cjs",
+  "ignore": [
+    "node_modules"
+  ],
+  "dependencies": {
+    "ramda": "ramda@^0.10.0",
+    "react": "react@^0.12.2",
+    "process": "github:jspm/nodelibs-process@^0.1.0"
+  }
+}

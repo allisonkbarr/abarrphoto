@@ -1,0 +1,16 @@
+{
+  "registry": "npm",
+  "jspm": {
+    "registry": "npm"
+  },
+  "format": "cjs",
+  "ignore": [
+    "node_modules"
+  ],
+  "map": {
+    "undefined": "./index"
+  },
+  "dependencies": {
+    "string_decoder": "string_decoder@^0.10.31"
+  }
+}

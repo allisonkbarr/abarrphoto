@@ -1,0 +1,16 @@
+{
+  "registry": "npm",
+  "jspm": {
+    "registry": "npm"
+  },
+  "format": "cjs",
+  "ignore": [
+    "node_modules"
+  ],
+  "map": {
+    "undefined": "./index"
+  },
+  "dependencies": {
+    "assert": "assert@^1.3.0"
+  }
+}
