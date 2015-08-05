@@ -7,7 +7,7 @@
     "dependencies": {
       "governorjs": "npm:governorjs@^0.0.3",
       "grapnel": "npm:grapnel@^0.5.8",
-      "jsx": "^1.0.1",
+      "jsx": "jspm:jsx@^1.0.1",
       "ramda": "npm:ramda@^0.10.0",
       "react": "npm:react@^0.12.2",
       "react-router": "npm:react-router@^0.12.4"

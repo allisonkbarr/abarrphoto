@@ -14298,13 +14298,13 @@ System.register("components/about.jsx!github:floatdrop/plugin-jsx@1.0.1", ["npm:
     }],
     execute: function() {
       $__export('default', React.createClass({render: function() {
-          var url = 'http://res.cloudinary.com/dv3yibyz2/image/upload/img001_vvca41.jpg';
+          var url = 'http://res.cloudinary.com/dv3yibyz2/image/upload/v1438786312/jfk-house/img001.jpg';
           var opts = R.merge(this.props.hub.get().screen, {crop: 'fill'});
           return React.createElement("div", {
             style: {backgroundImage: 'url(' + image(url, opts) + ')'},
             className: "page",
             id: "about-component"
-          }, React.createElement("div", {className: "content"}, React.createElement("h2", null, "About us"), React.createElement("p", null, "Our photographic services cover all aspects of the built environment; Specializing in the historic" + ' ' + "preservation projects, we document for national register nominations, historic structure reports and on-" + ' ' + "going building restoration documentation. Large format equipment and film is used to meet Historic" + ' ' + "American Building Survey (HABS) standards.")));
+          }, React.createElement("div", {className: "content"}, React.createElement("h2", null, "About us"), React.createElement("p", null, "Our photographic services cover all aspects of the built environment. Specializing in historic" + ' ' + "preservation projects, we document for National Register nominations, historic structure reports, and" + ' ' + "on-going building restoration documentation. Large-format equipment and film is used to meet Historic" + ' ' + "American Building Survey (HABS) standards.")));
         }}));
     }
   };
@@ -14396,9 +14396,9 @@ System.register("stores/project", ["npm:ramda@0.10.0"], function($__export) {
       projects = [{
         slug: 'jfk-house',
         name: 'JFK House',
-        description: ["This dwelling, which is the last vacation home used by JFK and his family in the summer of 1963, is on Squaw Island in Hyannisport, MA. It was photographed for a National Historic Register Nomination. The new owner, a Kennedy family member, declined to go forward with it."],
+        description: ["This dwelling, which is the last vacation home used by JFK and his family in the summer of 1963,\n    is on Squaw Island in Hyannisport, MA. It was photographed for a National Historic Register Nomination, but the\n    new owner, a Kennedy family member, declined to go forward with it."],
         photos: [{
-          src: IMG_ROOT + 'jfk-house/img001_vvca41.jpg',
+          src: IMG_ROOT + 'jfk-house/img001.jpg',
           caption: ''
         }, {
           src: IMG_ROOT + 'jfk-house/img014_zmpab5.jpg',
@@ -14423,6 +14423,18 @@ System.register("stores/project", ["npm:ramda@0.10.0"], function($__export) {
           caption: ''
         }, {
           src: IMG_ROOT + 'jfk-house/img007_tlqyxe.jpg',
+          caption: ''
+        }, {
+          src: IMG_ROOT + 'jfk-house/img016.jpg',
+          caption: ''
+        }, {
+          src: IMG_ROOT + 'jfk-house/img017.jpg',
+          caption: ''
+        }, {
+          src: IMG_ROOT + 'jfk-house/img018.jpg',
+          caption: ''
+        }, {
+          src: IMG_ROOT + 'jfk-house/img019.jpg',
           caption: ''
         }]
       }, {
@@ -14465,6 +14477,24 @@ System.register("stores/project", ["npm:ramda@0.10.0"], function($__export) {
         }]
       }];
       gallery = [{
+        src: IMG_ROOT + '01-West_Elevation_q65msi.jpg',
+        caption: ''
+      }, {
+        src: IMG_ROOT + '02-South_elevation_b0wgxk.jpg',
+        caption: ''
+      }, {
+        src: IMG_ROOT + '03-Southeast_Elevation_aihkbq.jpg',
+        caption: ''
+      }, {
+        src: IMG_ROOT + '04-East_Elevation_dxhpsl.jpg',
+        caption: ''
+      }, {
+        src: IMG_ROOT + '06-North_elevation_gv9ygk.jpg',
+        caption: ''
+      }, {
+        src: IMG_ROOT + '07-Southwest_elevation_at_wall_corner_ozaso4.jpg',
+        caption: ''
+      }, {
         src: IMG_ROOT + '15-cornice_and_brackets_azpvau.jpg',
         caption: ''
       }, {
