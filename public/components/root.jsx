@@ -23,18 +23,18 @@ export default React.createClass({
   renderPage: function() {
     switch (this.props._view.pane) {
       case 'about':
-        return <About 
+        return <About
           hub={this.props.hub}
         />
       case 'project':
-        return <Project 
-          hub={this.props.hub} 
-          project={this.props.projects.selected} 
+        return <Project
+          hub={this.props.hub}
+          project={this.props.projects.selected}
         />
       case 'gallery':
-        return <Project 
-          hub={this.props.hub} 
-          project={this.makeGalleryProject()} 
+        return <Project
+          hub={this.props.hub}
+          project={this.makeGalleryProject()}
         />
 
       default:
@@ -47,8 +47,8 @@ export default React.createClass({
     var isGallery = this.props._view.pane === 'gallery'
 
     return <div id="root-component" className={this.props.hub.get().showHeader ? 'header-open' : ''}>
-    
-      <Header 
+
+      <Header
         view={this.props._view}
         projects={this.props.projects}
         hub={this.props.hub}
@@ -57,12 +57,11 @@ export default React.createClass({
       { this.renderPage() }
 
       { this.props.projects.selectedThumbIndex || this.props.hub.get().galleryThumbIndex ?
-        <Gallery 
+        <Gallery
           hub={this.props.hub}
-          project={isGallery ? this.makeGalleryProject() : this.props.projects.selected} 
+          project={isGallery ? this.makeGalleryProject() : this.props.projects.selected}
           index={isGallery ? this.props.hub.get().galleryThumbIndex : this.props.projects.selectedThumbIndex}
           /> : null }
     </div>
   }
 })
-

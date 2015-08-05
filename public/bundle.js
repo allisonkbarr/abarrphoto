@@ -14366,16 +14366,54 @@ System.register("components/gallery.jsx!github:floatdrop/plugin-jsx@1.0.1", ["np
       image = $__m.default;
     }],
     execute: function() {
-      $__export('default', React.createClass({render: function() {
+      $__export('default', React.createClass({
+        hasNext: function() {
+          return this.props.project.photos[this.getNextIndex()];
+        },
+        hasBack: function() {
+          return this.props.project.photos[this.getBackIndex()];
+        },
+        getNextIndex: function() {
+          return parseInt(this.props.index) + 1;
+        },
+        getBackIndex: function() {
+          return parseInt(this.props.index) - 1;
+        },
+        getInitialState: function() {
+          return {loading: true};
+        },
+        componentWillReceiveProps: function() {
+          this.setState({loading: true});
+        },
+        render: function() {
+          var $__0 = this;
           var photo = this.props.project.photos[this.props.index];
+          var isGallery = this.props.project.name === 'gallery';
+          console.log('is loading?', this.state.loading);
           return React.createElement("div", {id: "gallery"}, React.createElement("a", {
-            href: this.props.project.name === 'gallery' ? '/#/gallery' : '/#/projects/' + this.props.project.slug,
-            className: "close"
-          }, React.createElement("i", {className: "fa fa-close"})), React.createElement("div", {
-            className: "big",
-            style: {backgroundImage: 'url(' + image(photo.src, this.props.hub.get().screen) + ')'}
-          }));
-        }}));
+            href: isGallery ? '/#/gallery' : '/#/projects/' + this.props.project.slug,
+            className: "close icon"
+          }, React.createElement("i", {className: "fa fa-close"})), React.createElement("img", {
+            style: {
+              position: 'absolute',
+              left: -9999
+            },
+            onLoad: (function() {
+              return $__0.setState({loading: false});
+            }),
+            src: image(photo.src, this.props.hub.get().screen)
+          }), React.createElement("div", {
+            className: "big " + (this.state.loading ? 'loading' : ''),
+            style: {backgroundImage: this.state.loading ? 'none' : 'url(' + image(photo.src, this.props.hub.get().screen) + ')'}
+          }), React.createElement("div", {className: "loader"}, React.createElement("i", {className: "fa fa-spinner fa-pulse"})), this.hasBack() ? React.createElement("a", {
+            href: (isGallery ? '/#/gallery/' : '/#/projects/' + this.props.project.slug + '/gallery/') + this.getBackIndex(),
+            className: "back icon"
+          }, React.createElement("i", {className: "fa fa-arrow-left"})) : null, this.hasNext() ? React.createElement("a", {
+            href: (isGallery ? '/#/gallery/' : '/#/projects/' + this.props.project.slug + '/gallery/') + this.getNextIndex(),
+            className: "next icon"
+          }, React.createElement("i", {className: "fa fa-arrow-right"})) : null);
+        }
+      }));
     }
   };
 });
@@ -14815,6 +14853,7 @@ System.register("boot.jsx!github:floatdrop/plugin-jsx@1.0.1", ["npm:react@0.12.2
         projects: projectStore,
         _view: viewStore
       }, function(state, hub) {
+        window.appState = state;
         React.render(React.createElement(Root, React.__spread({}, state, {hub: hub})), rootEl);
       });
       stateManager.hub.set({$set: {screen: screen}});

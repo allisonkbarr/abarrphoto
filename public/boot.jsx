@@ -19,6 +19,7 @@ var stateManager = Governor.create({
   projects: projectStore,
   _view: viewStore
 }, function(state, hub) {
+  window.appState = state
   React.render(<Root {...state} hub={hub} />, rootEl)
 })
 
@@ -53,4 +54,3 @@ router.get('/projects/:slug/gallery/:thumbIndex', function(ctx) {
   stateManager.hub.emit('selectThumbByIndex', ctx.params.slug, ctx.params.thumbIndex)
   stateManager.hub.emit('selectPane', 'project')
 })
-

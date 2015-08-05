@@ -15,7 +15,7 @@
         background: #eee;
         font-family: "Open Sans", sans-serif;
         -webkit-font-smoothing: subpixel-antialiased;
-        overflow: hidden;
+
       }
       .page {
         background-size: cover;
@@ -23,17 +23,18 @@
         background-position: center center;
         position: absolute;
         top: 0;
-        bottom: 0;
+
         right: 0;
         box-sizing: border-box;
         padding: 50px;
         transition: left .5s ease-in-out;
         left: 20%;
       }
-      #home-component {
+      #home-component.page {
+        bottom: 0;
       }
       #header-component {
-        position: absolute;
+        position: fixed;
         top: 0;
         left: 0;
         background: #000;
@@ -89,6 +90,7 @@
         }
         .page {
           left: 0;
+          padding: 0;
         }
         #gallery {
           left: 0 !important;
@@ -128,7 +130,8 @@
         background-color: #212121;
         color: #ffffff;
       }
-      #about-component {
+      #about-component.page {
+        bottom: 0;
       }
       .page .content {
         background: rgba(255, 255, 255, .8);
@@ -180,36 +183,63 @@
         height: auto;
       }
       #gallery {
-        position: absolute;
+        position: fixed;
         z-index: 2;
         top: 0;
         right: 0;
         bottom: 0;
-        left: 20%;
+        left: 0;
         background: #eee;
       }
       #gallery .big {
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
         bottom: 0;
         left: 0;
+        z-index: 1;
         background-size: contain;
         background-repeat: no-repeat;
         background-position: center center;
+        transition: opacity .5s;
+        opacity: 1;
+      }
+      #gallery .big.loading {
+        opacity: 0;
+      }
+      #gallery .icon {
+        line-height: 50px;
+        font-size: 34px;
+        z-index: 3;
+        text-decoration: none;
+        text-align: center;
+        background: rgba(0, 0, 0, .4);
+        color: #fff;
+        padding: 0 12px;
+      }
+      #gallery .next {
+        position: absolute;
+        top: 45%;
+        right: 0;
+      }
+      #gallery .back {
+        position: absolute;
+        top: 45%;
+        left: 0;
       }
       #gallery .close {
         position: absolute;
         top: 0;
         right: 0;
-        width: 50px;
-        line-height: 50px;
-        z-index: 3;
-        font-size: 34px;
-        text-decoration: none;
-        text-align: center;
-        background: #000;
-        color: #fff;
+        opacity: 1;
+        text-shadow: none;
+      }
+      #gallery .loader {
+        position: fixed;
+        top: 44%;
+        left: 48%;
+        z-index: 0;
+        font-size: 40px;
       }
       #project-link:hover {
         cursor: default;
