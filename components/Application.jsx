@@ -1,12 +1,25 @@
 import {element} from 'deku';
 
 export default {
-  render() {
+  render({ context, dispatch }) {
+
+    const up = () => dispatch({ type: 'UP'})
+
     return (
       <div>
-        <p>Hello World!</p>
-        <button>Click Me</button>
+        <p>{ context.number }</p>
+        <button onClick={up} >UPWARDS!</button>
+        <DownButton />
       </div>
     );
+  }
+}
+
+const DownButton = {
+  render({ dispatch }) {
+
+    const down = () => dispatch({ type: 'DOWN'})
+
+    return <button onClick={down} class="box">DOWNWARDS!</button>
   }
 }

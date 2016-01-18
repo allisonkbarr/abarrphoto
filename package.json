@@ -17,7 +17,8 @@
   },
   "homepage": "https://github.com/bbarr/abarrphoto#readme",
   "dependencies": {
-    "deku": "^2.0.0-rc13"
+    "deku": "^2.0.0-rc13",
+    "redux": "^3.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.4.0",
