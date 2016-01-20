@@ -1,0 +1,137 @@
+@import "bourbon/bourbon";
+@import "base/base";
+
+$black: #000;
+$white: #fff;
+$gray: #949494;
+$accent: #6C3728;
+
+
+
+// GENERAL STYLES
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+#mount {
+  color: $gray;
+}
+
+a {
+  color: $gray;
+  text-decoration: none;
+
+  &:visited {
+    color: $gray;
+  }
+
+  &:hover {
+    color: $gray;
+  }
+
+  &:active {
+    color: $gray;
+  }
+}
+
+h1 {
+  color: $white;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: 400;
+}
+
+
+
+// SIDEBAR STYLES
+
+@mixin sidebar-indent {
+  padding-left: 28px;
+}
+
+#sidebar-component {
+  width: 230px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: $black;
+  height: 100%;
+
+  &.hidden {
+    left: -230px;
+  }
+}
+
+#title {
+  margin-top: 22px;
+  cursor: pointer;
+  text-transform: uppercase;
+  line-height: 30px;
+  @include sidebar-indent;
+}
+
+#menu-toggle {
+  color: $white;
+  display: block;
+  background: $black;
+  padding: 6px 15px;
+  text-align: center;
+  right: -47px;
+  top: 0;
+  position: absolute;
+  font-size: 20px;
+}
+
+#menu {
+  margin-top: 42px;
+}
+
+.menu-item {
+  text-transform: uppercase;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  @include sidebar-indent;
+  cursor: pointer;
+}
+
+li.active {
+  background: $accent;
+  color: $black;
+  font-weight: 700;
+}
+
+#contact {
+  position: absolute;
+  bottom: 20px;
+  @include sidebar-indent;
+}
+
+
+
+// CONTENT AREA
+
+#content-component {
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+
+
+// HOME
+
+#home-component {
+  background-image: url(http://res.cloudinary.com/dv3yibyz2/image//upload/c_fill,w_644,h_778//FR_house-for_web-3_kta1ic.jpg);
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height: 100%;
+}
