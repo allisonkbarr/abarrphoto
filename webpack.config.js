@@ -28,6 +28,11 @@ module.exports = {
           presets: ['es2015'],
           plugins: [['transform-react-jsx', {pragma: 'element'}]]
         }
+      },
+      {
+        test: /\.scss$/,
+        loader: "style!css!sass?sourceMap",
+        include: path.join(__dirname, 'src')
       }
     ]
   }

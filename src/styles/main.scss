@@ -4,7 +4,9 @@
 $black: #000;
 $white: #fff;
 $gray: #949494;
-$accent: #6C3728;
+$lt-gray: #BBBBBB;
+$accent1: #279058;
+$accent2: #1F5940;
 
 
 
@@ -17,7 +19,7 @@ body {
 }
 
 #mount {
-  color: $gray;
+  color: $black;
 }
 
 a {
@@ -52,8 +54,11 @@ h1 {
   padding-left: 28px;
 }
 
+$sidebar-width: 230px;
+
 #sidebar-component {
-  width: 230px;
+  color: $gray;
+  width: $sidebar-width;
   position: fixed;
   top: 0;
   left: 0;
@@ -61,46 +66,68 @@ h1 {
   z-index: 1;
   background-color: $black;
   height: 100%;
+  @include transition(left 0.5s ease)
 
   &.hidden {
     left: -230px;
   }
 }
 
-#title {
+#nav-title {
   margin-top: 22px;
-  cursor: pointer;
   text-transform: uppercase;
   line-height: 30px;
   @include sidebar-indent;
 }
 
-#menu-toggle {
+#nav-toggle {
   color: $white;
   display: block;
   background: $black;
   padding: 6px 15px;
   text-align: center;
-  right: -47px;
+  left: $sidebar-width;
   top: 0;
   position: absolute;
   font-size: 20px;
 }
 
-#menu {
+#nav {
   margin-top: 42px;
 }
 
-.menu-item {
+.nav-item {
   text-transform: uppercase;
   padding-bottom: 12px;
   padding-top: 12px;
   @include sidebar-indent;
   cursor: pointer;
+
+  i {
+    margin-left: 100px;
+  }
+}
+
+#projects-nav {
+  position: absolute;
+  display: block;
+  background: $black;
+  left: $sidebar-width;
+  top: 214px;
+  width: 134px;
+
+  &.hidden {
+    left: -300px;
+  }
+
+  li {
+    text-transform: uppercase;
+    padding: 12px 12px;
+  }
 }
 
 li.active {
-  background: $accent;
+  background: $accent2;
   color: $black;
   font-weight: 700;
 }
@@ -113,25 +140,97 @@ li.active {
 
 
 
+// TITLE
+
+#title-container {
+  top: 0;
+  right: 0;
+  left: 47px;
+  position: fixed;
+  background-color: $white;
+}
+
+#title {
+  color: $black;
+  margin: 0;
+  padding: 0;
+  font-size: 18px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 42px;
+}
+
+
+
 // CONTENT AREA
 
 #content-component {
+  box-sizing: border-box;
   z-index: 0;
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  background-color: $white;
+  margin-top: 42px;
+}
+
+.page-title {
+  color: $black;
+  font-size: 30px;
+  font-weight: normal;
+  letter-spacing: 0.4em;
+  padding-top: 24px;
+  margin-bottom: 0;
+  text-transform: uppercase;
+}
+
+.page-component {
+  padding: 0 5%;
+  box-sizing: border-box;
 }
 
 
 
-// HOME
+// GALLERY
 
-#home-component {
-  background-image: url(http://res.cloudinary.com/dv3yibyz2/image//upload/c_fill,w_644,h_778//FR_house-for_web-3_kta1ic.jpg);
+.thumbs a {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 200px;
+  margin: 5% 0;
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
+}
+
+
+
+// ABOUT
+
+#about-component {
   height: 100%;
+  background-image: url("http://res.cloudinary.com/dv3yibyz2/image//upload/c_fill/v1438786312/jfk-house/img001.jpg");
+  background-position: center -46px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: $black;
+}
+
+#about-p {
+  margin-top: 280px;
+  color: $white;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 300;
+}
+
+
+
+// PROJECTS
+
+p {
+  margin-top: 5%;
 }

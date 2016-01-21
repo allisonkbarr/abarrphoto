@@ -1,18 +1,11 @@
-import {dom, element} from 'deku'
+import { dom, element } from 'deku'
 import Application from './components/Application.jsx'
-import { createStore } from 'redux'
-var x = require('deku')
+import { createStore, combineReducers } from 'redux'
+import reducers from './reducers'
+import './src/styles/main.scss'
 
-const reducer = (state = { number: 0 }, action) => {
-  switch (action.type) {
-    case 'UP':
-      return Object.assign(state, { number: state.number+1 })
-    case 'DOWN':
-      return Object.assign(state, { number: state.number-1 })
-    default:
-      return state
-  }
-}
+
+const reducer = combineReducers(reducers)
 
 const store = createStore(reducer)
 
