@@ -132,15 +132,17 @@ $sidebar-width: 215px;
   display: block;
   background: $black;
   left: $sidebar-width;
+  right: 0;
   top: 214px;
-  width: 125px;
   display: none;
+  @include calc(width, "100vw - #{$sidebar-width}");
 
   li {
     text-transform: uppercase;
     padding: 12px 10px;
     font-weight: 400;
     color: $gray;
+    word-wrap: break-word;
   }
 }
 
@@ -202,6 +204,7 @@ $sidebar-width: 215px;
   padding-top: 24px;
   margin-bottom: 0;
   text-transform: uppercase;
+  word-wrap: break-word;
 }
 
 .page-component {
@@ -319,6 +322,14 @@ $sidebar-width: 215px;
 // TABLET PORTRAIT & MOBILE LANDSCAPE STYLES
 
 @media only screen and (min-width : 568px) {
+
+  // SIDEBAR
+
+  #projects-nav {
+    width: 170px;
+  }
+
+
 
   // GALLERY
 

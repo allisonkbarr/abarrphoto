@@ -51,7 +51,7 @@ const SideBar = {
         </li>
       </ul>
 
-      <a id="contact" href="mailto:abarrphoto@gmail.com">abarrphoto@gmail.com</a>
+      <a id="contact" href="mailto:abarrphoto@gmail.com" onClick={prevDef(context.actions.loadGallery)}>abarrphoto@gmail.com</a>
 
   </div>
   }

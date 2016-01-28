@@ -25,46 +25,21 @@ const view = (state, action) => {
   }
 }
 
-const galleryImages = () => {
-  return [
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/01-West_Elevation_q65msi.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/02-South_elevation_b0wgxk.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/03-Southeast_Elevation_aihkbq.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/01-West_Elevation_q65msi.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/02-South_elevation_b0wgxk.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/03-Southeast_Elevation_aihkbq.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/01-West_Elevation_q65msi.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/02-South_elevation_b0wgxk.jpg',
-  'http://res.cloudinary.com/dv3yibyz2/image/upload/c_fit,h_200/_IGP4889_v9ltv8.jpg'
-  ]
+const galleryImages = (state, action) => {
+  switch (action.type) {
+    case 'SET_GALLERY_IMAGES':
+      return action.payload
+    default:
+      return state || []
+  }
 }
 
-const projects = () => {
-  return {
-    jfkHouse: {
-      title: 'JFK House',
-      blurb: 'This dwelling, which is the last vacation home used by JFK and his family in the summer of 1963, is on Squaw Island in Hyannisport, MA. It was photographed for a National Historic Register Nomination, but the new owner, a Kennedy family member, declined to go forward with it.',
-      photos: [
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//jfk-house/img001.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//jfk-house/img014_zmpab5.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//jfk-house/img014_zmpab5.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//jfk-house/img014_zmpab5.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//jfk-house/img014_zmpab5.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_vertical-12_ntdm3h.jpg'
-      ]
-    },
-    duckHouse: {
-      title: 'Duck House',
-      blurb: '<p>From the Fenway Civic Association website:</p><p>"On Agassiz Road, the parkway that links the East and West Fenway, sits a late 19th century building known as the Duck House.  This City-owned building, which has been boarded up and out of use since the 1980s, has the potential to serve as a community asset."</p><p>This building was photo documented with large format photography to assist a documentation class of the BAC.</p>',
-      photos: [
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_horizontal-1_oajvgf.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_horizontal-3_cpliwe.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_horizontal-4_zohcsm.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_vertical-12_ntdm3h.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_vertical-12_ntdm3h.jpg',
-        'http://res.cloudinary.com/dv3yibyz2/image//upload/c_fit,w_200,h_200//HABS_vertical-12_ntdm3h.jpg'
-      ]
-    }
+const projects = (state, action) => {
+  switch (action.type) {
+    case 'SET_PROJECTS':
+      return action.payload
+    default:
+      return state || {}
   }
 }
 
