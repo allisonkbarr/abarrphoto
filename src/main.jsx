@@ -6,7 +6,7 @@ import Application from './components/Application.jsx'
 import { createStore, combineReducers } from 'redux'
 import reducers from './reducers'
 import * as actions from './actions'
-import './src/styles/main.scss'
+import './styles/main.scss'
 
 
 const reducer = combineReducers(reducers)

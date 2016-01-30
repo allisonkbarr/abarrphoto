@@ -5,7 +5,7 @@ module.exports = {
   devtool: '#source-map',
   entry: [
     'webpack-hot-middleware/client',
-    './main.jsx'
+    './src/main.jsx'
   ],
   output: {
     path: path.join(__dirname, 'build'),
