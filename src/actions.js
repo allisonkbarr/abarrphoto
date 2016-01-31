@@ -28,13 +28,13 @@ const fetch = (url) => {
 
 const parseProject = async (projects, name) => {
   const project = projects[name]
-  const imageNames = keys(project).filter(key => key !== 'project.txt')
+  const imageUrls = keys(project).filter(key => key !== 'project.txt').map((str)=>`https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/${name}/${str}`)
   const text = await fetch(`https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/${name}/project.txt`)
   const afterName = text.split('[title]')[1]
   const parts = afterName.split('[description]')
   const [ title, blurb ] = parts
   return {
-    photos: imageNames,
+    photos: imageUrls,
     title,
     blurb
   }

@@ -20,7 +20,9 @@ const view = (state, action) => {
         sidebarHidden: true,
         currentProject: null,
         overlayOpen: false,
-        currentImage: null
+        currentImage: null,
+        windowWidth: window.innerWidth,
+        windowHeight: window.innerHeight
       }
   }
 }

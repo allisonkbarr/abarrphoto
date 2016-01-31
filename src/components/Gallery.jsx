@@ -1,5 +1,5 @@
 import {element} from 'deku'
-import {createPhotoA} from '../helpers'
+import {createPhotoA, thumbUrl} from '../helpers'
 
 
 export default {
@@ -8,7 +8,9 @@ export default {
     return <div class="page-component" id="gallery-component">
       <h2 class="page-title">Gallery</h2>
       <div class="thumbs">
-        { context.galleryImages.map(createPhotoA.bind(null, dispatch)) }
+        {
+          context.galleryImages.map(thumbUrl.bind(null, dispatch, context.view.windowWidth))
+        }
       </div>
     </div>
   }

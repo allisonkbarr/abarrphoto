@@ -237,7 +237,7 @@ $sidebar-width: 215px;
 
 #about-component {
   height: 100%;
-  background-image: url("http://res.cloudinary.com/dv3yibyz2/image//upload/c_fill/v1438786312/jfk-house/img001.jpg");
+  background-image: url("https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/jfk-house/img001.jpg");
   background-position: center -46px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -262,10 +262,14 @@ $sidebar-width: 215px;
   margin-top: 5%;
 }
 
-// GALLERY OVERLAY
+// OVERLAY
+
+.overlay-open {
+  overflow: hidden;
+}
 
 #overlay-component {
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
@@ -335,13 +339,16 @@ $sidebar-width: 215px;
 
   .thumbs {
     margin-top: 2.5%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
 
     a {
+      display: inline-block;
       width: 31%;
       margin-bottom: 3%;
+      margin-right: 3.5%;
+
+      &:nth-child(3n+3) {
+        margin-right: 0;
+      }
     }
   }
 
@@ -420,6 +427,10 @@ $sidebar-width: 215px;
 
 
   // PROJECTS
+
+  .thumbs a {
+    height: 250px;
+  }
 
   #project-blurb {
     margin-top: 2.5%;

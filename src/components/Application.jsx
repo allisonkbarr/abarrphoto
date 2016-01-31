@@ -1,6 +1,7 @@
 import {element} from 'deku'
 import SideBar from './Sidebar.jsx'
 import Content from './Content.jsx'
+import Overlay from './Overlay.jsx'
 
 
 export default {

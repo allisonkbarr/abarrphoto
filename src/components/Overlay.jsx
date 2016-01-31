@@ -1,7 +1,17 @@
 import {element} from 'deku'
 import {overlayOpen, overlayClose} from '../action_creators'
+import {overlayImgUrl} from '../helpers'
 
 export default {
+
+  onCreate () {
+    return document.body.classList.add('overlay-open')
+  },
+
+  onRemove () {
+    return document.body.classList.remove('overlay-open')
+  },
+
   render({ context, dispatch }) {
 
     const i = context.view.currentImage
@@ -24,7 +34,7 @@ export default {
     return <div id="overlay-component">
       <div id="overlay-container">
         <i class="material-icons" id="left-arrow" onClick={showPrevImg}>chevron_left</i>
-        <div id="overlay-image-div" style={ 'background-image: url(' + currentImages[i] + ')'}></div>
+        <div id="overlay-image-div" style={ 'background-image: url(' + overlayImgUrl(context.view.windowWidth, context.view.windowHeight, currentImages[i]) + ')'}></div>
         <i class="material-icons" id="right-arrow" onClick={showNextImg}>chevron_right</i>
       </div>
       <i class="material-icons" id="close-button" onClick={() => dispatch(overlayClose())} >close</i>
