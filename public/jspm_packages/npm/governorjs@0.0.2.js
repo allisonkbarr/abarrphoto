@@ -1,1 +1,0 @@
-module.exports = require("npm:governorjs@0.0.2/lib/index");

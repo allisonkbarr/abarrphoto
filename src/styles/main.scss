@@ -1,0 +1,448 @@
+@import "bourbon/bourbon";
+@import "base/base";
+
+$black: #000;
+$white: #fff;
+$gray: #949494;
+$lt-gray: #BBBBBB;
+$accent: #1F5940;
+
+
+
+// GENERAL STYLES
+
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+#mount {
+  color: $black;
+}
+
+a {
+  color: $gray;
+  text-decoration: none;
+
+  &:visited {
+    color: $gray;
+  }
+
+  &:hover {
+    color: $gray;
+  }
+
+  &:active {
+    color: $gray;
+  }
+}
+
+h1 {
+  color: $white;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: 400;
+}
+
+
+
+// SIDEBAR STYLES
+
+@mixin sidebar-indent {
+  padding-left: 20px;
+}
+
+$sidebar-width: 215px;
+
+#sidebar-component {
+  color: $gray;
+  width: $sidebar-width;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1;
+  background-color: $black;
+  height: 100%;
+  @include transition(left 0.5s ease)
+
+  &.hidden {
+    left: -($sidebar-width);
+
+    #projects-nav {
+      display: none !important;
+    }
+  }
+}
+
+#nav-title {
+  margin-top: 22px;
+  text-transform: uppercase;
+  line-height: 30px;
+  @include sidebar-indent;
+}
+
+#nav-toggle {
+  color: $white;
+  display: block;
+  background: $black;
+  padding: 6px 9px;
+  text-align: center;
+  left: $sidebar-width;
+  top: 0;
+  position: absolute;
+  font-size: 20px;
+  line-height: 1;
+}
+
+#nav {
+  margin-top: 42px;
+}
+
+.nav-item {
+  text-transform: uppercase;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  @include sidebar-indent;
+  cursor: pointer;
+
+  i {
+    float: right;
+    padding-right: 10px;
+  }
+}
+
+.nav-item, #projects-nav li {
+  letter-spacing: 0.05em;
+
+  &:hover {
+    background-color: rgba($accent, 0.8);
+    font-weight: 700;
+    color: $black;
+  }
+}
+
+#projects-link:hover #projects-nav {
+  display: block;
+}
+
+#projects-nav {
+  position: absolute;
+  display: block;
+  background: $black;
+  left: $sidebar-width;
+  right: 0;
+  top: 214px;
+  display: none;
+  @include calc(width, "100vw - #{$sidebar-width}");
+
+  li {
+    text-transform: uppercase;
+    padding: 12px 10px;
+    font-weight: 400;
+    color: $gray;
+    word-wrap: break-word;
+  }
+}
+
+#nav li.active {
+  background: $accent;
+  color: $black;
+  font-weight: 700;
+}
+
+#contact {
+  position: absolute;
+  bottom: 20px;
+  @include sidebar-indent;
+}
+
+
+
+// TITLE
+
+#title-container {
+  top: 0;
+  right: 0;
+  left: 47px;
+  position: fixed;
+  background-color: $white;
+}
+
+#title {
+  color: $black;
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 42px;
+}
+
+
+
+// CONTENT AREA
+
+#content-component {
+  box-sizing: border-box;
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: $white;
+  margin-top: 42px;
+}
+
+.page-title {
+  color: $black;
+  font-size: 30px;
+  font-weight: normal;
+  letter-spacing: 0.4em;
+  padding-top: 24px;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  word-wrap: break-word;
+}
+
+.page-component {
+  padding: 0 5%;
+  box-sizing: border-box;
+}
+
+
+
+// GALLERY
+
+.thumbs {
+  margin-top: 5%;
+
+  a {
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    height: 200px;
+    margin: 0 0 5%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+  }
+}
+
+
+
+// ABOUT
+
+#about-component {
+  height: 100%;
+  background-image: url("https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/jfk-house/img001.jpg");
+  background-position: center -46px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: $black;
+}
+
+#about-p {
+  position: absolute;
+  bottom: 2%;
+  right: 5%;
+  left: 5%;
+  color: $white;
+  line-height: 28px;
+  font-weight: 300;
+}
+
+
+
+// PROJECTS
+
+#project-blurb {
+  margin-top: 5%;
+}
+
+// OVERLAY
+
+.overlay-open {
+  overflow: hidden;
+}
+
+#overlay-component {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: $black;
+  z-index: 2;
+
+  i {
+    color: $white;
+    z-index: 3;
+    cursor: pointer;
+  }
+}
+
+#overlay-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 0 2%;
+  box-sizing: border-box;
+}
+
+#left-arrow {
+  font-size: 38px;
+}
+
+#right-arrow {
+  font-size: 38px;
+}
+
+#overlay-image-div {
+  height: 96%;
+  width: 90%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+}
+
+.overlay-open {
+  overflow: hidden;
+}
+
+
+
+// TABLET PORTRAIT & MOBILE LANDSCAPE STYLES
+
+@media only screen and (min-width : 568px) {
+
+  // SIDEBAR
+
+  #projects-nav {
+    width: 170px;
+  }
+
+
+
+  // GALLERY
+
+  .thumbs {
+    margin-top: 2.5%;
+
+    a {
+      display: inline-block;
+      width: 31%;
+      margin-bottom: 3%;
+      margin-right: 3.5%;
+
+      &:nth-child(3n+3) {
+        margin-right: 0;
+      }
+    }
+  }
+
+}
+
+
+
+// DESKTOP SCREENS
+
+@media only screen and (min-width : 1024px) {
+
+  // SIDEBAR
+
+  @mixin sidebar-indent-desktop {
+    padding-left: 25px;
+  }
+
+  $sidebar-width-desktop: 230px;
+
+  #nav-title, .nav-item, #contact {
+    @include sidebar-indent-desktop;
+  }
+
+  #nav-toggle {
+    display: none;
+  }
+
+  #sidebar-component {
+    width: $sidebar-width-desktop;
+
+    &.hidden {
+      left: 0;
+    }
+  }
+
+  #projects-nav {
+    left: $sidebar-width-desktop;
+    cursor: pointer;
+  }
+
+  #projects-link:hover #projects-nav { // only affects touch-enabled laptops and landscape tablets
+    display: block !important;
+  }
+
+
+
+  // CONTENT AREA
+
+  #content-component {
+    left: $sidebar-width-desktop;
+    margin-top: 0;
+  }
+
+  #title-container {
+    display: none;
+  }
+
+  .page-title {
+    padding-top: 31px;
+  }
+
+
+
+  // ABOUT
+
+  #about-component {
+    background-position: center center;
+  }
+
+  #about-p {
+    font-size: 16px;
+    line-height: 32px;
+    bottom: 10%;
+    right: 20%;
+  }
+
+
+  // PROJECTS
+
+  .thumbs a {
+    height: 250px;
+  }
+
+  #project-blurb {
+    margin-top: 2.5%;
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  // OVERLAY
+
+  #close-button {
+    top: 30px;
+    right: 30px;
+  }
+
+}
