@@ -87,7 +87,7 @@ $sidebar-width: 215px;
   color: $white;
   display: block;
   background: $black;
-  padding: 6px 9px;
+  padding: 8px 9px 7px;
   text-align: center;
   left: $sidebar-width;
   top: 0;
@@ -237,7 +237,6 @@ $sidebar-width: 215px;
 
 #about-component {
   height: 100%;
-  background-image: url("https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/jfk-house/img001.jpg");
   background-position: center -46px;
   background-repeat: no-repeat;
   background-size: cover;
@@ -337,14 +336,33 @@ $sidebar-width: 215px;
 
   // GALLERY
 
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg)
+    }
+    50% {
+      transform: rotate(180deg)
+    }
+    100% {
+      transform: rotate(360deg)
+    }
+  }
+
   .thumbs {
     margin-top: 2.5%;
 
     a {
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      float: left;
       width: 31%;
       margin-bottom: 3%;
       margin-right: 3.5%;
+
+      i {
+        animation: rotate 1s linear infinite running;
+      }
 
       &:nth-child(3n+3) {
         margin-right: 0;

@@ -27,6 +27,15 @@ const view = (state, action) => {
   }
 }
 
+const loadedImages = (state, action) => {
+  switch (action.type) {
+    case 'IMAGE_LOADED':
+      return state.concat([ action.payload ])
+    default:
+      return state || []
+  }
+}
+
 const galleryImages = (state, action) => {
   switch (action.type) {
     case 'SET_GALLERY_IMAGES':
@@ -53,7 +62,8 @@ const reducers = {
   view,
   galleryImages,
   projects,
-  about
+  about,
+  loadedImages
 }
 
 export default reducers

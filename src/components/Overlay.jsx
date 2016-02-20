@@ -31,7 +31,7 @@ export default {
         dispatch(overlayOpen(currentImages.length-1))
     }
 
-    return <div id="overlay-component">
+    return <div>
       <div id="overlay-container">
         <i class="material-icons" id="left-arrow" onClick={showPrevImg}>chevron_left</i>
         <div id="overlay-image-div" style={ 'background-image: url(' + overlayImgUrl(context.view.windowWidth, context.view.windowHeight, currentImages[i]) + ')'}></div>

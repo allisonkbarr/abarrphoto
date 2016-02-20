@@ -1,5 +1,5 @@
 import {element} from 'deku'
-import {createPhotoA, thumbUrl} from '../helpers'
+import {createThumb} from '../helpers'
 
 
 export default {
@@ -9,7 +9,7 @@ export default {
       <h2 class="page-title">Gallery</h2>
       <div class="thumbs">
         {
-          context.galleryImages.map(thumbUrl.bind(null, dispatch, context.view.windowWidth))
+          context.galleryImages.map(createThumb.bind(null, dispatch, context.view.windowWidth, context.loadedImages))
         }
       </div>
     </div>

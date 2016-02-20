@@ -28,7 +28,7 @@ const fetch = (url) => {
 
 const parseProject = async (projects, name) => {
   const project = projects[name]
-  const imageUrls = keys(project).filter(key => key !== 'project.txt').map((str)=>`https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/${name}/${str}`)
+  const imageUrls = keys(project).filter(key => key !== 'project.txt').map((str)=>`https://www.abarrphoto.com/photos/projects/${name}/${str}`)
   const text = await fetch(`https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/${name}/project.txt`)
   const afterName = text.split('[title]')[1]
   const parts = afterName.split('[description]')
@@ -46,7 +46,7 @@ export const loadData = async () => {
 
   const { gallery, projects } = data.photos
 
-  const galleryImages = keys(gallery).map(x => `https://s3.amazonaws.com/www.abarrphoto.com/photos/gallery/${x}`)
+  const galleryImages = keys(gallery).map(x => `https://www.abarrphoto.com/photos/gallery/${x}`)
   const projectDataPromises = keys(projects).map(parseProject.bind(null, projects))
 
   const projectData = await Promise.all(projectDataPromises)
