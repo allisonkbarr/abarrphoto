@@ -1,6 +1,6 @@
 import {element} from 'deku'
 import marked from 'marked'
-import {createPhotoA, thumbUrl} from '../helpers'
+import {createThumb} from '../helpers'
 
 
 export default {
@@ -13,7 +13,7 @@ export default {
       <div id="project-blurb" innerHTML={ marked(current.blurb) }></div>
       <div class="thumbs">
         {
-          current.photos.map(thumbUrl.bind(null, dispatch, context.view.windowWidth))
+          current.photos.map(createThumb.bind(null, dispatch, context.view.windowWidth, context.loadedImages))
         }
       </div>
     </div>
