@@ -27,10 +27,20 @@ const view = (state, action) => {
   }
 }
 
+const loadedOverlayImages = (state, action) => {
+  switch (action.type) {
+    case 'OVERLAY_IMAGE_LOADED':
+      return state.concat([ action.image ])
+    default:
+      return state || []
+  }
+}
+
+
 const loadedImages = (state, action) => {
   switch (action.type) {
     case 'IMAGE_LOADED':
-      return state.concat([ action.payload ])
+      return state.concat([ action.image ])
     default:
       return state || []
   }
@@ -63,7 +73,8 @@ const reducers = {
   galleryImages,
   projects,
   about,
-  loadedImages
+  loadedImages,
+  loadedOverlayImages
 }
 
 export default reducers

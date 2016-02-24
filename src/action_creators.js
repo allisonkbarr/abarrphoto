@@ -8,10 +8,16 @@ const overlayClose = () => ({ type: 'CLOSE_OVERLAY' })
 
 const overlayOpen = image => ({ type: 'OPEN_OVERLAY', image })
 
+const imgLoaded = image => ({ type: 'IMAGE_LOADED', image })
+
+const overlayImgLoaded = image => ({ type: 'OVERLAY_IMAGE_LOADED', image })
+
 export {
   pageSelect,
   sidebarToggle,
   projectSelect,
   overlayClose,
-  overlayOpen
+  overlayOpen,
+  imgLoaded,
+  overlayImgLoaded
 }

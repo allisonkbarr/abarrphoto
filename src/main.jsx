@@ -20,6 +20,8 @@ function update () {
   render(<Application />, { ...store.getState(), actions })
 }
 
+
+
 // First render
 update()
 

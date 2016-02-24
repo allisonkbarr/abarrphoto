@@ -55,7 +55,7 @@ var app =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "3d0f212927bc3a43b6b0"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1bd8b15287c829e02386"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -1367,7 +1367,7 @@ var app =
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.overlayImgUrl = exports.thumbUrl = exports.imgUrl = exports.createPhotoA = exports.prevDef = undefined;
+	exports.preload = exports.createOverlayImgDiv = exports.createThumb = exports.imgUrl = exports.prevDef = undefined;
 	
 	var _deku = __webpack_require__(18);
 	
@@ -1380,7 +1380,30 @@ var app =
 	  };
 	};
 	
-	var createPhotoA = function createPhotoA(dispatch, url, i) {
+	var loadingImages = [];
+	var createPhotoLink = function createPhotoLink(dispatch, loadedImages, url, i) {
+	
+	  var isLoaded = loadedImages.indexOf(url) > -1;
+	
+	  if (!isLoaded) {
+	    var isLoading = loadingImages.indexOf(url) > -1;
+	    if (!isLoading) {
+	      loadingImages.push(url);
+	      preload(url, function () {
+	        return dispatch((0, _action_creators.imgLoaded)(url));
+	      });
+	    }
+	    return (0, _deku.element)(
+	      'a',
+	      { href: '#', onClick: prevDef },
+	      (0, _deku.element)(
+	        'i',
+	        { 'class': 'material-icons loader' },
+	        'cached'
+	      )
+	    );
+	  }
+	
 	  return (0, _deku.element)('a', { href: '#', style: 'background-image: url(' + url + ')', onClick: prevDef(function () {
 	      return dispatch((0, _action_creators.overlayOpen)(i));
 	    }) });
@@ -1392,12 +1415,13 @@ var app =
 	  return height ? 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fill/' + originalSrc : 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',c_fill/' + originalSrc;
 	};
 	
-	var thumbUrl = function thumbUrl(dispatch, windowWidth, url, i) {
+	var createThumb = function createThumb(dispatch, windowWidth, loadedImages, url, i) {
+	
 	  var threeAcrossWidth = windowWidth < 1024 ? parseInt(windowWidth * 0.31) : parseInt((windowWidth - 230) * 0.31);
 	
 	  var modifiedUrl = windowWidth < 568 ? imgUrl(url, parseInt(windowWidth), 200) : imgUrl(url, threeAcrossWidth, 250);
 	
-	  return createPhotoA(dispatch, modifiedUrl, i);
+	  return createPhotoLink(dispatch, loadedImages, modifiedUrl, i);
 	};
 	
 	var overlayImgUrl = function overlayImgUrl(windowWidth, windowHeight, originalSrc) {
@@ -1406,11 +1430,53 @@ var app =
 	  return 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fit/' + originalSrc;
 	};
 	
+	var loadingOverlayImages = [];
+	
+	var createOverlayImgDiv = function createOverlayImgDiv(dispatch, loadedOverlayImages, width, height, originalSrc) {
+	
+	  var url = overlayImgUrl(width, height, originalSrc);
+	  var isLoaded = loadedOverlayImages.indexOf(url) > -1;
+	
+	  if (!isLoaded) {
+	    var isLoading = loadingOverlayImages.indexOf(url) > -1;
+	    if (!isLoading) {
+	      loadingOverlayImages.push(url);
+	      preload(url, function () {
+	        return dispatch((0, _action_creators.overlayImgLoaded)(url));
+	      });
+	    }
+	    return (0, _deku.element)(
+	      'div',
+	      { id: 'overlay-image-div' },
+	      (0, _deku.element)(
+	        'i',
+	        { 'class': 'material-icons loader' },
+	        'cached'
+	      )
+	    );
+	  }
+	  return (0, _deku.element)('div', { id: 'overlay-image-div', style: 'background-image: url(' + url + ')' });
+	};
+	
+	var preload = function preload(imgUrl, callback) {
+	
+	  var image = document.createElement('img');
+	  image.style = 'position: absolute; left: -1000px; height: 1px; width: 1px;';
+	  document.body.appendChild(image);
+	
+	  image.onload = function () {
+	    document.body.removeChild(image);
+	    callback();
+	  };
+	
+	  image.setAttribute('src', imgUrl);
+	};
+	
 	exports.prevDef = prevDef;
-	exports.createPhotoA = createPhotoA;
 	exports.imgUrl = imgUrl;
-	exports.thumbUrl = thumbUrl;
-	exports.overlayImgUrl = overlayImgUrl;
+	exports.createThumb = createThumb;
+	exports.createOverlayImgDiv = createOverlayImgDiv;
+	exports.preload = preload;
 
 /***/ },
 /* 28 */
@@ -1792,11 +1858,21 @@ var app =
 	  return { type: 'OPEN_OVERLAY', image: image };
 	};
 	
+	var imgLoaded = function imgLoaded(image) {
+	  return { type: 'IMAGE_LOADED', image: image };
+	};
+	
+	var overlayImgLoaded = function overlayImgLoaded(image) {
+	  return { type: 'OVERLAY_IMAGE_LOADED', image: image };
+	};
+	
 	exports.pageSelect = pageSelect;
 	exports.sidebarToggle = sidebarToggle;
 	exports.projectSelect = projectSelect;
 	exports.overlayClose = overlayClose;
 	exports.overlayOpen = overlayOpen;
+	exports.imgLoaded = imgLoaded;
+	exports.overlayImgLoaded = overlayImgLoaded;
 
 /***/ },
 /* 44 */
@@ -2021,7 +2097,7 @@ var app =
 	
 	
 	// module
-	exports.push([module.id, "button, input[type=\"button\"], input[type=\"reset\"], input[type=\"submit\"] {\n  appearance: none;\n  background-color: #1565c0;\n  border: 0;\n  border-radius: 3px;\n  color: #fff;\n  cursor: pointer;\n  display: inline-block;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  -webkit-font-smoothing: antialiased;\n  font-weight: 600;\n  line-height: 1;\n  padding: 0.75em 1.5em;\n  text-decoration: none;\n  transition: background-color 150ms ease;\n  user-select: none;\n  vertical-align: middle;\n  white-space: nowrap; }\n  button:hover, button:focus, input[type=\"button\"]:hover, input[type=\"button\"]:focus, input[type=\"reset\"]:hover, input[type=\"reset\"]:focus, input[type=\"submit\"]:hover, input[type=\"submit\"]:focus {\n    background-color: #11519a;\n    color: #fff; }\n  button:disabled, input[type=\"button\"]:disabled, input[type=\"reset\"]:disabled, input[type=\"submit\"]:disabled {\n    cursor: not-allowed;\n    opacity: 0.5; }\n    button:disabled:hover, input[type=\"button\"]:disabled:hover, input[type=\"reset\"]:disabled:hover, input[type=\"submit\"]:disabled:hover {\n      background-color: #1565c0; }\n\nfieldset {\n  background-color: transparent;\n  border: 0;\n  margin: 0;\n  padding: 0; }\n\nlegend {\n  font-weight: 600;\n  margin-bottom: 0.375em;\n  padding: 0; }\n\nlabel {\n  display: block;\n  font-weight: 600;\n  margin-bottom: 0.375em; }\n\ninput,\nselect {\n  display: block;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em; }\n\ninput[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea,\nselect[multiple] {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 3px;\n  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);\n  box-sizing: border-box;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  margin-bottom: 0.75em;\n  padding: 0.5em;\n  transition: border-color 150ms ease;\n  width: 100%; }\n  input[type=\"color\"]:hover, input[type=\"date\"]:hover, input[type=\"datetime\"]:hover, input[type=\"datetime-local\"]:hover, input[type=\"email\"]:hover, input[type=\"month\"]:hover, input[type=\"number\"]:hover, input[type=\"password\"]:hover, input[type=\"search\"]:hover, input[type=\"tel\"]:hover, input[type=\"text\"]:hover, input[type=\"time\"]:hover, input[type=\"url\"]:hover, input[type=\"week\"]:hover, input:not([type]):hover, textarea:hover,\n  select[multiple]:hover {\n    border-color: #b1b1b1; }\n  input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus,\n  select[multiple]:focus {\n    border-color: #1565c0;\n    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px rgba(18, 89, 169, 0.7);\n    outline: none; }\n  input[type=\"color\"]:disabled, input[type=\"date\"]:disabled, input[type=\"datetime\"]:disabled, input[type=\"datetime-local\"]:disabled, input[type=\"email\"]:disabled, input[type=\"month\"]:disabled, input[type=\"number\"]:disabled, input[type=\"password\"]:disabled, input[type=\"search\"]:disabled, input[type=\"tel\"]:disabled, input[type=\"text\"]:disabled, input[type=\"time\"]:disabled, input[type=\"url\"]:disabled, input[type=\"week\"]:disabled, input:not([type]):disabled, textarea:disabled,\n  select[multiple]:disabled {\n    background-color: #f2f2f2;\n    cursor: not-allowed; }\n    input[type=\"color\"]:disabled:hover, input[type=\"date\"]:disabled:hover, input[type=\"datetime\"]:disabled:hover, input[type=\"datetime-local\"]:disabled:hover, input[type=\"email\"]:disabled:hover, input[type=\"month\"]:disabled:hover, input[type=\"number\"]:disabled:hover, input[type=\"password\"]:disabled:hover, input[type=\"search\"]:disabled:hover, input[type=\"tel\"]:disabled:hover, input[type=\"text\"]:disabled:hover, input[type=\"time\"]:disabled:hover, input[type=\"url\"]:disabled:hover, input[type=\"week\"]:disabled:hover, input:not([type]):disabled:hover, textarea:disabled:hover,\n    select[multiple]:disabled:hover {\n      border: 1px solid #ddd; }\n\ntextarea {\n  resize: vertical; }\n\n[type=\"search\"] {\n  appearance: none; }\n\n[type=\"checkbox\"],\n[type=\"radio\"] {\n  display: inline;\n  margin-right: 0.375em; }\n\n[type=\"file\"] {\n  margin-bottom: 0.75em;\n  width: 100%; }\n\nselect {\n  margin-bottom: 1.5em;\n  max-width: 100%;\n  width: auto; }\n\nul,\nol {\n  list-style-type: none;\n  margin: 0;\n  padding: 0; }\n\ndl {\n  margin-bottom: 0.75em; }\n  dl dt {\n    font-weight: 600;\n    margin-top: 0.75em; }\n  dl dd {\n    margin: 0; }\n\ntable {\n  border-collapse: collapse;\n  margin: 0.75em 0;\n  table-layout: fixed;\n  width: 100%; }\n\nth {\n  border-bottom: 1px solid #a6a6a6;\n  font-weight: 600;\n  padding: 0.75em 0;\n  text-align: left; }\n\ntd {\n  border-bottom: 1px solid #ddd;\n  padding: 0.75em 0; }\n\ntr,\ntd,\nth {\n  vertical-align: middle; }\n\nbody {\n  color: #333;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  line-height: 1.5; }\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  line-height: 1.2;\n  margin: 0 0 0.75em; }\n\np {\n  margin: 0 0 0.75em; }\n\na {\n  color: #1565c0;\n  text-decoration: none;\n  transition: color 150ms ease; }\n  a:active, a:focus, a:hover {\n    color: #104c90; }\n\nhr {\n  border-bottom: 1px solid #ddd;\n  border-left: 0;\n  border-right: 0;\n  border-top: 0;\n  margin: 1.5em 0; }\n\nimg,\npicture {\n  margin: 0;\n  max-width: 100%; }\n\nbody {\n  font-family: 'Open Sans', Arial, sans-serif;\n  box-sizing: border-box;\n  font-size: 14px; }\n\n#mount {\n  color: #000; }\n\na {\n  color: #949494;\n  text-decoration: none; }\n  a:visited {\n    color: #949494; }\n  a:hover {\n    color: #949494; }\n  a:active {\n    color: #949494; }\n\nh1 {\n  color: #fff;\n  font-size: 24px;\n  font-family: inherit;\n  font-weight: 400; }\n\n#sidebar-component {\n  color: #949494;\n  width: 215px;\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  z-index: 1;\n  background-color: #000;\n  height: 100%;\n  -webkit-transition: left 0.5s ease;\n  -moz-transition: left 0.5s ease;\n  transition: left 0.5s ease; }\n  #sidebar-component.hidden {\n    left: -215px; }\n    #sidebar-component.hidden #projects-nav {\n      display: none !important; }\n\n#nav-title {\n  margin-top: 22px;\n  text-transform: uppercase;\n  line-height: 30px;\n  padding-left: 20px; }\n\n#nav-toggle {\n  color: #fff;\n  display: block;\n  background: #000;\n  padding: 8px 9px 7px;\n  text-align: center;\n  left: 215px;\n  top: 0;\n  position: absolute;\n  font-size: 20px;\n  line-height: 1; }\n\n#nav {\n  margin-top: 42px; }\n\n.nav-item {\n  text-transform: uppercase;\n  padding-bottom: 12px;\n  padding-top: 12px;\n  padding-left: 20px;\n  cursor: pointer; }\n  .nav-item i {\n    float: right;\n    padding-right: 10px; }\n\n.nav-item, #projects-nav li {\n  letter-spacing: 0.05em; }\n  .nav-item:hover, #projects-nav li:hover {\n    background-color: rgba(31, 89, 64, 0.8);\n    font-weight: 700;\n    color: #000; }\n\n#projects-link:hover #projects-nav {\n  display: block; }\n\n#projects-nav {\n  position: absolute;\n  display: block;\n  background: #000;\n  left: 215px;\n  right: 0;\n  top: 214px;\n  display: none;\n  width: -webkit-calc(100vw - 215px);\n  width: calc(100vw - 215px); }\n  #projects-nav li {\n    text-transform: uppercase;\n    padding: 12px 10px;\n    font-weight: 400;\n    color: #949494;\n    word-wrap: break-word; }\n\n#nav li.active {\n  background: #1F5940;\n  color: #000;\n  font-weight: 700; }\n\n#contact {\n  position: absolute;\n  bottom: 20px;\n  padding-left: 20px; }\n\n#title-container {\n  top: 0;\n  right: 0;\n  left: 47px;\n  position: fixed;\n  background-color: #fff; }\n\n#title {\n  color: #000;\n  margin: 0;\n  padding: 0;\n  font-size: 17px;\n  text-align: center;\n  text-transform: uppercase;\n  line-height: 42px; }\n\n#content-component {\n  box-sizing: border-box;\n  z-index: 0;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: #fff;\n  margin-top: 42px; }\n\n.page-title {\n  color: #000;\n  font-size: 30px;\n  font-weight: normal;\n  letter-spacing: 0.4em;\n  padding-top: 24px;\n  margin-bottom: 0;\n  text-transform: uppercase;\n  word-wrap: break-word; }\n\n.page-component {\n  padding: 0 5%;\n  box-sizing: border-box; }\n\n.thumbs {\n  margin-top: 5%; }\n  .thumbs a {\n    box-sizing: border-box;\n    display: block;\n    width: 100%;\n    height: 200px;\n    margin: 0 0 5%;\n    background-size: cover;\n    background-position: center center;\n    background-repeat: no-repeat; }\n\n#about-component {\n  height: 100%;\n  background-position: center -46px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  background-color: #000; }\n\n#about-p {\n  position: absolute;\n  bottom: 2%;\n  right: 5%;\n  left: 5%;\n  color: #fff;\n  line-height: 28px;\n  font-weight: 300; }\n\n#project-blurb {\n  margin-top: 5%; }\n\n.overlay-open {\n  overflow: hidden; }\n\n#overlay-component {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n  background-color: #000;\n  z-index: 2; }\n  #overlay-component i {\n    color: #fff;\n    z-index: 3;\n    cursor: pointer; }\n\n#overlay-container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  height: 100%;\n  width: 100%;\n  padding: 0 2%;\n  box-sizing: border-box; }\n\n#left-arrow {\n  font-size: 38px; }\n\n#right-arrow {\n  font-size: 38px; }\n\n#overlay-image-div {\n  height: 96%;\n  width: 90%;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: contain; }\n\n#close-button {\n  position: absolute;\n  top: 20px;\n  right: 20px;\n  font-size: 30px; }\n\n.overlay-open {\n  overflow: hidden; }\n\n@media only screen and (min-width: 568px) {\n  #projects-nav {\n    width: 170px; }\n  .thumbs {\n    margin-top: 2.5%; }\n    .thumbs a {\n      display: inline-block;\n      width: 31%;\n      margin-bottom: 3%;\n      margin-right: 3.5%; }\n      .thumbs a:nth-child(3n+3) {\n        margin-right: 0; } }\n\n@media only screen and (min-width: 1024px) {\n  #nav-title, .nav-item, #contact {\n    padding-left: 25px; }\n  #nav-toggle {\n    display: none; }\n  #sidebar-component {\n    width: 230px; }\n    #sidebar-component.hidden {\n      left: 0; }\n  #projects-nav {\n    left: 230px;\n    cursor: pointer; }\n  #projects-link:hover #projects-nav {\n    display: block !important; }\n  #content-component {\n    left: 230px;\n    margin-top: 0; }\n  #title-container {\n    display: none; }\n  .page-title {\n    padding-top: 31px; }\n  #about-component {\n    background-position: center center; }\n  #about-p {\n    font-size: 16px;\n    line-height: 32px;\n    bottom: 10%;\n    right: 20%; }\n  .thumbs a {\n    height: 250px; }\n  #project-blurb {\n    margin-top: 2.5%;\n    font-size: 16px;\n    line-height: 26px; }\n  #close-button {\n    top: 30px;\n    right: 30px; } }\n", ""]);
+	exports.push([module.id, "button, input[type=\"button\"], input[type=\"reset\"], input[type=\"submit\"] {\n  appearance: none;\n  background-color: #1565c0;\n  border: 0;\n  border-radius: 3px;\n  color: #fff;\n  cursor: pointer;\n  display: inline-block;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  -webkit-font-smoothing: antialiased;\n  font-weight: 600;\n  line-height: 1;\n  padding: 0.75em 1.5em;\n  text-decoration: none;\n  transition: background-color 150ms ease;\n  user-select: none;\n  vertical-align: middle;\n  white-space: nowrap; }\n  button:hover, button:focus, input[type=\"button\"]:hover, input[type=\"button\"]:focus, input[type=\"reset\"]:hover, input[type=\"reset\"]:focus, input[type=\"submit\"]:hover, input[type=\"submit\"]:focus {\n    background-color: #11519a;\n    color: #fff; }\n  button:disabled, input[type=\"button\"]:disabled, input[type=\"reset\"]:disabled, input[type=\"submit\"]:disabled {\n    cursor: not-allowed;\n    opacity: 0.5; }\n    button:disabled:hover, input[type=\"button\"]:disabled:hover, input[type=\"reset\"]:disabled:hover, input[type=\"submit\"]:disabled:hover {\n      background-color: #1565c0; }\n\nfieldset {\n  background-color: transparent;\n  border: 0;\n  margin: 0;\n  padding: 0; }\n\nlegend {\n  font-weight: 600;\n  margin-bottom: 0.375em;\n  padding: 0; }\n\nlabel {\n  display: block;\n  font-weight: 600;\n  margin-bottom: 0.375em; }\n\ninput,\nselect {\n  display: block;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em; }\n\ninput[type=\"color\"], input[type=\"date\"], input[type=\"datetime\"], input[type=\"datetime-local\"], input[type=\"email\"], input[type=\"month\"], input[type=\"number\"], input[type=\"password\"], input[type=\"search\"], input[type=\"tel\"], input[type=\"text\"], input[type=\"time\"], input[type=\"url\"], input[type=\"week\"], input:not([type]), textarea,\nselect[multiple] {\n  background-color: #fff;\n  border: 1px solid #ddd;\n  border-radius: 3px;\n  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06);\n  box-sizing: border-box;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  margin-bottom: 0.75em;\n  padding: 0.5em;\n  transition: border-color 150ms ease;\n  width: 100%; }\n  input[type=\"color\"]:hover, input[type=\"date\"]:hover, input[type=\"datetime\"]:hover, input[type=\"datetime-local\"]:hover, input[type=\"email\"]:hover, input[type=\"month\"]:hover, input[type=\"number\"]:hover, input[type=\"password\"]:hover, input[type=\"search\"]:hover, input[type=\"tel\"]:hover, input[type=\"text\"]:hover, input[type=\"time\"]:hover, input[type=\"url\"]:hover, input[type=\"week\"]:hover, input:not([type]):hover, textarea:hover,\n  select[multiple]:hover {\n    border-color: #b1b1b1; }\n  input[type=\"color\"]:focus, input[type=\"date\"]:focus, input[type=\"datetime\"]:focus, input[type=\"datetime-local\"]:focus, input[type=\"email\"]:focus, input[type=\"month\"]:focus, input[type=\"number\"]:focus, input[type=\"password\"]:focus, input[type=\"search\"]:focus, input[type=\"tel\"]:focus, input[type=\"text\"]:focus, input[type=\"time\"]:focus, input[type=\"url\"]:focus, input[type=\"week\"]:focus, input:not([type]):focus, textarea:focus,\n  select[multiple]:focus {\n    border-color: #1565c0;\n    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.06), 0 0 5px rgba(18, 89, 169, 0.7);\n    outline: none; }\n  input[type=\"color\"]:disabled, input[type=\"date\"]:disabled, input[type=\"datetime\"]:disabled, input[type=\"datetime-local\"]:disabled, input[type=\"email\"]:disabled, input[type=\"month\"]:disabled, input[type=\"number\"]:disabled, input[type=\"password\"]:disabled, input[type=\"search\"]:disabled, input[type=\"tel\"]:disabled, input[type=\"text\"]:disabled, input[type=\"time\"]:disabled, input[type=\"url\"]:disabled, input[type=\"week\"]:disabled, input:not([type]):disabled, textarea:disabled,\n  select[multiple]:disabled {\n    background-color: #f2f2f2;\n    cursor: not-allowed; }\n    input[type=\"color\"]:disabled:hover, input[type=\"date\"]:disabled:hover, input[type=\"datetime\"]:disabled:hover, input[type=\"datetime-local\"]:disabled:hover, input[type=\"email\"]:disabled:hover, input[type=\"month\"]:disabled:hover, input[type=\"number\"]:disabled:hover, input[type=\"password\"]:disabled:hover, input[type=\"search\"]:disabled:hover, input[type=\"tel\"]:disabled:hover, input[type=\"text\"]:disabled:hover, input[type=\"time\"]:disabled:hover, input[type=\"url\"]:disabled:hover, input[type=\"week\"]:disabled:hover, input:not([type]):disabled:hover, textarea:disabled:hover,\n    select[multiple]:disabled:hover {\n      border: 1px solid #ddd; }\n\ntextarea {\n  resize: vertical; }\n\n[type=\"search\"] {\n  appearance: none; }\n\n[type=\"checkbox\"],\n[type=\"radio\"] {\n  display: inline;\n  margin-right: 0.375em; }\n\n[type=\"file\"] {\n  margin-bottom: 0.75em;\n  width: 100%; }\n\nselect {\n  margin-bottom: 1.5em;\n  max-width: 100%;\n  width: auto; }\n\nul,\nol {\n  list-style-type: none;\n  margin: 0;\n  padding: 0; }\n\ndl {\n  margin-bottom: 0.75em; }\n  dl dt {\n    font-weight: 600;\n    margin-top: 0.75em; }\n  dl dd {\n    margin: 0; }\n\ntable {\n  border-collapse: collapse;\n  margin: 0.75em 0;\n  table-layout: fixed;\n  width: 100%; }\n\nth {\n  border-bottom: 1px solid #a6a6a6;\n  font-weight: 600;\n  padding: 0.75em 0;\n  text-align: left; }\n\ntd {\n  border-bottom: 1px solid #ddd;\n  padding: 0.75em 0; }\n\ntr,\ntd,\nth {\n  vertical-align: middle; }\n\nbody {\n  color: #333;\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  line-height: 1.5; }\n\nh1,\nh2,\nh3,\nh4,\nh5,\nh6 {\n  font-family: \"Helvetica Neue\", \"Helvetica\", \"Roboto\", \"Arial\", sans-serif;\n  font-size: 1em;\n  line-height: 1.2;\n  margin: 0 0 0.75em; }\n\np {\n  margin: 0 0 0.75em; }\n\na {\n  color: #1565c0;\n  text-decoration: none;\n  transition: color 150ms ease; }\n  a:active, a:focus, a:hover {\n    color: #104c90; }\n\nhr {\n  border-bottom: 1px solid #ddd;\n  border-left: 0;\n  border-right: 0;\n  border-top: 0;\n  margin: 1.5em 0; }\n\nimg,\npicture {\n  margin: 0;\n  max-width: 100%; }\n\nbody {\n  font-family: 'Open Sans', Arial, sans-serif;\n  box-sizing: border-box;\n  font-size: 14px; }\n\n#mount {\n  color: #000; }\n\na {\n  color: #949494;\n  text-decoration: none; }\n  a:visited {\n    color: #949494; }\n  a:hover {\n    color: #949494; }\n  a:active {\n    color: #949494; }\n\nh1 {\n  color: #fff;\n  font-size: 24px;\n  font-family: inherit;\n  font-weight: 400; }\n\n#sidebar-component {\n  color: #949494;\n  width: 215px;\n  position: fixed;\n  top: 0;\n  left: 0;\n  bottom: 0;\n  z-index: 1;\n  background-color: #000;\n  height: 100%;\n  -webkit-transition: left 0.5s ease;\n  -moz-transition: left 0.5s ease;\n  transition: left 0.5s ease; }\n  #sidebar-component.hidden {\n    left: -215px; }\n    #sidebar-component.hidden #projects-nav {\n      display: none !important; }\n\n#nav-title {\n  margin-top: 22px;\n  text-transform: uppercase;\n  line-height: 30px;\n  padding-left: 20px; }\n\n#nav-toggle {\n  color: #fff;\n  display: block;\n  background: #000;\n  padding: 8px 9px 7px;\n  text-align: center;\n  left: 215px;\n  top: 0;\n  position: absolute;\n  font-size: 20px;\n  line-height: 1; }\n\n#nav {\n  margin-top: 42px; }\n\n.nav-item {\n  text-transform: uppercase;\n  padding-bottom: 12px;\n  padding-top: 12px;\n  padding-left: 20px;\n  cursor: pointer; }\n  .nav-item i {\n    float: right;\n    padding-right: 10px; }\n\n.nav-item, #projects-nav li {\n  letter-spacing: 0.05em; }\n  .nav-item:hover, #projects-nav li:hover {\n    background-color: rgba(31, 89, 64, 0.8);\n    font-weight: 700;\n    color: #000; }\n\n#projects-link:hover #projects-nav {\n  display: block; }\n\n#projects-nav {\n  position: absolute;\n  display: block;\n  background: #000;\n  left: 215px;\n  right: 0;\n  top: 214px;\n  display: none;\n  width: -webkit-calc(100vw - 215px);\n  width: calc(100vw - 215px); }\n  #projects-nav li {\n    text-transform: uppercase;\n    padding: 12px 10px;\n    font-weight: 400;\n    color: #949494;\n    word-wrap: break-word; }\n\n#nav li.active {\n  background: #1F5940;\n  color: #000;\n  font-weight: 700; }\n\n#contact {\n  position: absolute;\n  bottom: 20px;\n  padding-left: 20px; }\n\n#title-container {\n  top: 0;\n  right: 0;\n  left: 47px;\n  position: fixed;\n  background-color: #fff; }\n\n#title {\n  color: #000;\n  margin: 0;\n  padding: 0;\n  font-size: 17px;\n  text-align: center;\n  text-transform: uppercase;\n  line-height: 42px; }\n\n#content-component {\n  box-sizing: border-box;\n  z-index: 0;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: #fff;\n  margin-top: 42px; }\n\n.page-title {\n  color: #000;\n  font-size: 30px;\n  font-weight: normal;\n  letter-spacing: 0.4em;\n  padding-top: 24px;\n  margin-bottom: 0;\n  text-transform: uppercase;\n  word-wrap: break-word; }\n\n.page-component {\n  padding: 0 5%;\n  box-sizing: border-box; }\n\n.thumbs {\n  margin-top: 5%; }\n  .thumbs a {\n    box-sizing: border-box;\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: center;\n    width: 100%;\n    height: 200px;\n    margin: 0 0 5%;\n    background-size: cover;\n    background-position: center center;\n    background-repeat: no-repeat; }\n\n@keyframes rotate {\n  0% {\n    transform: rotate(0deg); }\n  50% {\n    transform: rotate(180deg); }\n  100% {\n    transform: rotate(360deg); } }\n\n.loader {\n  animation: rotate 1s linear infinite running; }\n\n#about-component {\n  height: 100%;\n  background-position: center -46px;\n  background-repeat: no-repeat;\n  background-size: cover;\n  background-color: #000; }\n\n#about-p {\n  position: absolute;\n  bottom: 2%;\n  right: 5%;\n  left: 5%;\n  color: #fff;\n  line-height: 28px;\n  font-weight: 300; }\n\n#project-blurb {\n  margin-top: 5%; }\n\n.overlay-open {\n  overflow: hidden; }\n\n#overlay-component {\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  right: 0;\n  left: 0;\n  background-color: #000;\n  z-index: 2; }\n  #overlay-component i {\n    color: #fff;\n    z-index: 3;\n    cursor: pointer; }\n\n#overlay-container {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  height: 100%;\n  width: 100%;\n  padding: 0 2%;\n  box-sizing: border-box; }\n\n#left-arrow {\n  font-size: 38px; }\n\n#right-arrow {\n  font-size: 38px; }\n\n#overlay-image-div {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  height: 96%;\n  width: 90%;\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: contain; }\n\n#close-button {\n  position: absolute;\n  top: 20px;\n  right: 20px;\n  font-size: 30px; }\n\n.overlay-open {\n  overflow: hidden; }\n\n@media only screen and (min-width: 568px) {\n  #projects-nav {\n    width: 170px; }\n  .thumbs {\n    margin-top: 2.5%; }\n    .thumbs a {\n      float: left;\n      width: 31%;\n      margin-bottom: 3%;\n      margin-right: 3.5%; }\n      .thumbs a:nth-child(3n+3) {\n        margin-right: 0; } }\n\n@media only screen and (min-width: 1024px) {\n  #nav-title, .nav-item, #contact {\n    padding-left: 25px; }\n  #nav-toggle {\n    display: none; }\n  #sidebar-component {\n    width: 230px; }\n    #sidebar-component.hidden {\n      left: 0; }\n  #projects-nav {\n    left: 230px;\n    cursor: pointer; }\n  #projects-link:hover #projects-nav {\n    display: block !important; }\n  #content-component {\n    left: 230px;\n    margin-top: 0; }\n  #title-container {\n    display: none; }\n  .page-title {\n    padding-top: 31px; }\n  #about-component {\n    background-position: center center; }\n  #about-p {\n    font-size: 16px;\n    line-height: 32px;\n    bottom: 10%;\n    right: 20%; }\n  .thumbs a {\n    height: 250px; }\n  #project-blurb {\n    margin-top: 2.5%;\n    font-size: 16px;\n    line-height: 26px; }\n  #close-button {\n    top: 30px;\n    right: 30px; } }\n", ""]);
 	
 	// exports
 
@@ -6117,7 +6193,7 @@ var app =
 	      (0, _deku.element)(
 	        'div',
 	        { 'class': 'thumbs' },
-	        context.galleryImages.map(_helpers.thumbUrl.bind(null, dispatch, context.view.windowWidth))
+	        context.galleryImages.map(_helpers.createThumb.bind(null, dispatch, context.view.windowWidth, context.loadedImages))
 	      )
 	    );
 	  }
@@ -6172,7 +6248,7 @@ var app =
 	          { 'class': 'material-icons', id: 'left-arrow', onClick: showPrevImg },
 	          'chevron_left'
 	        ),
-	        (0, _deku.element)('div', { id: 'overlay-image-div', style: 'background-image: url(' + (0, _helpers.overlayImgUrl)(context.view.windowWidth, context.view.windowHeight, currentImages[i]) + ')' }),
+	        (0, _helpers.createOverlayImgDiv)(dispatch, context.loadedOverlayImages, context.view.windowWidth, context.view.windowHeight, currentImages[i]),
 	        (0, _deku.element)(
 	          'i',
 	          { 'class': 'material-icons', id: 'right-arrow', onClick: showNextImg },
@@ -6229,7 +6305,7 @@ var app =
 	      (0, _deku.element)(
 	        'div',
 	        { 'class': 'thumbs' },
-	        current.photos.map(_helpers.thumbUrl.bind(null, dispatch, context.view.windowWidth))
+	        current.photos.map(_helpers.createThumb.bind(null, dispatch, context.view.windowWidth, context.loadedImages))
 	      )
 	    );
 	  }
@@ -6432,6 +6508,24 @@ var app =
 	  }
 	};
 	
+	var loadedOverlayImages = function loadedOverlayImages(state, action) {
+	  switch (action.type) {
+	    case 'OVERLAY_IMAGE_LOADED':
+	      return state.concat([action.image]);
+	    default:
+	      return state || [];
+	  }
+	};
+	
+	var loadedImages = function loadedImages(state, action) {
+	  switch (action.type) {
+	    case 'IMAGE_LOADED':
+	      return state.concat([action.image]);
+	    default:
+	      return state || [];
+	  }
+	};
+	
 	var galleryImages = function galleryImages(state, action) {
 	  switch (action.type) {
 	    case 'SET_GALLERY_IMAGES':
@@ -6458,7 +6552,9 @@ var app =
 	  view: view,
 	  galleryImages: galleryImages,
 	  projects: projects,
-	  about: about
+	  about: about,
+	  loadedImages: loadedImages,
+	  loadedOverlayImages: loadedOverlayImages
 	};
 	
 	exports.default = reducers;

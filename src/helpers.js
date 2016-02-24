@@ -1,5 +1,5 @@
 import {element} from 'deku'
-import {overlayOpen} from './action_creators'
+import {overlayOpen, imgLoaded, overlayImgLoaded } from './action_creators'
 
 
 const prevDef = fn => e => {
@@ -16,9 +16,9 @@ const createPhotoLink = (dispatch, loadedImages, url, i) => {
     const isLoading = loadingImages.indexOf(url) > -1
     if (!isLoading) {
       loadingImages.push(url)
-      preload(url, () => dispatch({ type: 'IMAGE_LOADED', payload: url }))
+      preload(url, () => dispatch(imgLoaded(url)))
     }
-    return <a href="#" onClick={prevDef}><i class="material-icons">cached</i></a>
+    return <a href="#" onClick={prevDef}><i class="material-icons loader">cached</i></a>
   }
 
   return <a href="#" style={`background-image: url(${url})`} onClick={prevDef(() => dispatch(overlayOpen(i)))} ></a>
@@ -45,11 +45,32 @@ const createThumb = (dispatch, windowWidth, loadedImages, url, i) => {
   return createPhotoLink(dispatch, loadedImages, modifiedUrl, i)
 }
 
+
+
 const overlayImgUrl = (windowWidth, windowHeight, originalSrc) => {
   const width = parseInt(windowWidth * 0.9)
   const height = parseInt(windowHeight)
   return 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fit/' + originalSrc
 }
+
+const loadingOverlayImages = []
+
+const createOverlayImgDiv = (dispatch, loadedOverlayImages, width, height, originalSrc) => {
+
+  const url = overlayImgUrl(width, height, originalSrc)
+  const isLoaded = loadedOverlayImages.indexOf(url) > -1
+
+  if (!isLoaded) {
+    const isLoading = loadingOverlayImages.indexOf(url) > -1
+    if (!isLoading) {
+      loadingOverlayImages.push(url)
+      preload(url, () => dispatch(overlayImgLoaded(url)))
+    }
+    return <div id="overlay-image-div"><i class="material-icons loader">cached</i></div>
+  }
+  return <div id="overlay-image-div" style={'background-image: url(' + url + ')'}></div>
+}
+
 
 
 const preload = (imgUrl, callback) => {
@@ -60,7 +81,7 @@ const preload = (imgUrl, callback) => {
 
   image.onload = () => {
     document.body.removeChild(image)
-    callback()
+    callback && callback()
   }
 
   image.setAttribute('src', imgUrl)
@@ -71,6 +92,6 @@ export {
   prevDef,
   imgUrl,
   createThumb,
-  overlayImgUrl,
+  createOverlayImgDiv,
   preload
 }
