@@ -55,7 +55,7 @@ var app =
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "1bd8b15287c829e02386"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "1a865b5bba490cf4031f"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
 /******/ 	
@@ -640,7 +640,7 @@ var app =
 /***/ function(module, exports, __webpack_require__) {
 
 	var store  = __webpack_require__(78)('wks')
-	  , uid    = __webpack_require__(25)
+	  , uid    = __webpack_require__(26)
 	  , Symbol = __webpack_require__(6).Symbol;
 	module.exports = function(name){
 	  return store[name] || (store[name] =
@@ -720,7 +720,7 @@ var app =
 	// for correct work wrapped methods / constructors with methods like LoDash isNative
 	var global    = __webpack_require__(6)
 	  , hide      = __webpack_require__(17)
-	  , SRC       = __webpack_require__(25)('src')
+	  , SRC       = __webpack_require__(26)('src')
 	  , TO_STRING = 'toString'
 	  , $toString = Function[TO_STRING]
 	  , TPL       = ('' + $toString).split(TO_STRING);
@@ -1010,7 +1010,7 @@ var app =
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(23);
+	var aFunction = __webpack_require__(24);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -1068,7 +1068,7 @@ var app =
 	
 	var diff = _interopRequireWildcard(_diff);
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	var vnode = _interopRequireWildcard(_element);
 	
@@ -1134,6 +1134,126 @@ var app =
 
 /***/ },
 /* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.preload = exports.createOverlayImgDiv = exports.createThumb = exports.imgUrl = exports.prevDef = undefined;
+	
+	var _deku = __webpack_require__(18);
+	
+	var _action_creators = __webpack_require__(43);
+	
+	var prevDef = function prevDef(fn) {
+	  return function (e) {
+	    e.preventDefault();
+	    fn();
+	  };
+	};
+	
+	var loadingImages = [];
+	var createPhotoLink = function createPhotoLink(dispatch, loadedImages, url, i) {
+	
+	  var isLoaded = loadedImages.indexOf(url) > -1;
+	
+	  if (!isLoaded) {
+	    var isLoading = loadingImages.indexOf(url) > -1;
+	    if (!isLoading) {
+	      loadingImages.push(url);
+	      preload(url, function () {
+	        return dispatch((0, _action_creators.imgLoaded)(url));
+	      });
+	    }
+	    return (0, _deku.element)(
+	      'a',
+	      { href: '#', onClick: prevDef },
+	      (0, _deku.element)(
+	        'i',
+	        { 'class': 'material-icons loader' },
+	        'cached'
+	      )
+	    );
+	  }
+	
+	  return (0, _deku.element)('a', { href: '#', style: 'background-image: url(' + url + ')', onClick: prevDef(function () {
+	      return dispatch((0, _action_creators.overlayOpen)(i));
+	    }) });
+	};
+	
+	var imgUrl = function imgUrl(originalSrc, width) {
+	  var height = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
+	
+	  return height ? 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fill/' + originalSrc : 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',c_fill/' + originalSrc;
+	};
+	
+	var createThumb = function createThumb(dispatch, windowWidth, loadedImages, url, i) {
+	
+	  var threeAcrossWidth = windowWidth < 1024 ? parseInt(windowWidth * 0.31) : parseInt((windowWidth - 230) * 0.31);
+	
+	  var modifiedUrl = windowWidth < 568 ? imgUrl(url, parseInt(windowWidth), 200) : imgUrl(url, threeAcrossWidth, 250);
+	
+	  return createPhotoLink(dispatch, loadedImages, modifiedUrl, i);
+	};
+	
+	var overlayImgUrl = function overlayImgUrl(windowWidth, windowHeight, originalSrc) {
+	  var width = parseInt(windowWidth * 0.9);
+	  var height = parseInt(windowHeight);
+	  return 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fit/' + originalSrc;
+	};
+	
+	var loadingOverlayImages = [];
+	
+	var createOverlayImgDiv = function createOverlayImgDiv(dispatch, loadedOverlayImages, width, height, originalSrc) {
+	
+	  var url = overlayImgUrl(width, height, originalSrc);
+	  var isLoaded = loadedOverlayImages.indexOf(url) > -1;
+	
+	  if (!isLoaded) {
+	    var isLoading = loadingOverlayImages.indexOf(url) > -1;
+	    if (!isLoading) {
+	      loadingOverlayImages.push(url);
+	      preload(url, function () {
+	        return dispatch((0, _action_creators.overlayImgLoaded)(url));
+	      });
+	    }
+	    return (0, _deku.element)(
+	      'div',
+	      { id: 'overlay-image-div' },
+	      (0, _deku.element)(
+	        'i',
+	        { 'class': 'material-icons loader' },
+	        'cached'
+	      )
+	    );
+	  }
+	  return (0, _deku.element)('div', { id: 'overlay-image-div', style: 'background-image: url(' + url + ')' });
+	};
+	
+	var preload = function preload(imgUrl, callback) {
+	
+	  var image = document.createElement('img');
+	  image.style = 'position: absolute; left: -1000px; height: 1px; width: 1px;';
+	  document.body.appendChild(image);
+	
+	  image.onload = function () {
+	    document.body.removeChild(image);
+	    callback && callback();
+	  };
+	
+	  image.setAttribute('src', imgUrl);
+	};
+	
+	exports.prevDef = prevDef;
+	exports.imgUrl = imgUrl;
+	exports.createThumb = createThumb;
+	exports.createOverlayImgDiv = createOverlayImgDiv;
+	exports.preload = preload;
+
+/***/ },
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -1142,7 +1262,7 @@ var app =
 	};
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// 22.1.3.31 Array.prototype[@@unscopables]
@@ -1154,7 +1274,7 @@ var app =
 	};
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	var id = 0
@@ -1164,7 +1284,7 @@ var app =
 	};
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1357,126 +1477,6 @@ var app =
 	
 	  return args.join('.');
 	};
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.preload = exports.createOverlayImgDiv = exports.createThumb = exports.imgUrl = exports.prevDef = undefined;
-	
-	var _deku = __webpack_require__(18);
-	
-	var _action_creators = __webpack_require__(43);
-	
-	var prevDef = function prevDef(fn) {
-	  return function (e) {
-	    e.preventDefault();
-	    fn();
-	  };
-	};
-	
-	var loadingImages = [];
-	var createPhotoLink = function createPhotoLink(dispatch, loadedImages, url, i) {
-	
-	  var isLoaded = loadedImages.indexOf(url) > -1;
-	
-	  if (!isLoaded) {
-	    var isLoading = loadingImages.indexOf(url) > -1;
-	    if (!isLoading) {
-	      loadingImages.push(url);
-	      preload(url, function () {
-	        return dispatch((0, _action_creators.imgLoaded)(url));
-	      });
-	    }
-	    return (0, _deku.element)(
-	      'a',
-	      { href: '#', onClick: prevDef },
-	      (0, _deku.element)(
-	        'i',
-	        { 'class': 'material-icons loader' },
-	        'cached'
-	      )
-	    );
-	  }
-	
-	  return (0, _deku.element)('a', { href: '#', style: 'background-image: url(' + url + ')', onClick: prevDef(function () {
-	      return dispatch((0, _action_creators.overlayOpen)(i));
-	    }) });
-	};
-	
-	var imgUrl = function imgUrl(originalSrc, width) {
-	  var height = arguments.length <= 2 || arguments[2] === undefined ? null : arguments[2];
-	
-	  return height ? 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fill/' + originalSrc : 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',c_fill/' + originalSrc;
-	};
-	
-	var createThumb = function createThumb(dispatch, windowWidth, loadedImages, url, i) {
-	
-	  var threeAcrossWidth = windowWidth < 1024 ? parseInt(windowWidth * 0.31) : parseInt((windowWidth - 230) * 0.31);
-	
-	  var modifiedUrl = windowWidth < 568 ? imgUrl(url, parseInt(windowWidth), 200) : imgUrl(url, threeAcrossWidth, 250);
-	
-	  return createPhotoLink(dispatch, loadedImages, modifiedUrl, i);
-	};
-	
-	var overlayImgUrl = function overlayImgUrl(windowWidth, windowHeight, originalSrc) {
-	  var width = parseInt(windowWidth * 0.9);
-	  var height = parseInt(windowHeight);
-	  return 'http://res.cloudinary.com/dv3yibyz2/image/fetch/w_' + width + ',h_' + height + ',c_fit/' + originalSrc;
-	};
-	
-	var loadingOverlayImages = [];
-	
-	var createOverlayImgDiv = function createOverlayImgDiv(dispatch, loadedOverlayImages, width, height, originalSrc) {
-	
-	  var url = overlayImgUrl(width, height, originalSrc);
-	  var isLoaded = loadedOverlayImages.indexOf(url) > -1;
-	
-	  if (!isLoaded) {
-	    var isLoading = loadingOverlayImages.indexOf(url) > -1;
-	    if (!isLoading) {
-	      loadingOverlayImages.push(url);
-	      preload(url, function () {
-	        return dispatch((0, _action_creators.overlayImgLoaded)(url));
-	      });
-	    }
-	    return (0, _deku.element)(
-	      'div',
-	      { id: 'overlay-image-div' },
-	      (0, _deku.element)(
-	        'i',
-	        { 'class': 'material-icons loader' },
-	        'cached'
-	      )
-	    );
-	  }
-	  return (0, _deku.element)('div', { id: 'overlay-image-div', style: 'background-image: url(' + url + ')' });
-	};
-	
-	var preload = function preload(imgUrl, callback) {
-	
-	  var image = document.createElement('img');
-	  image.style = 'position: absolute; left: -1000px; height: 1px; width: 1px;';
-	  document.body.appendChild(image);
-	
-	  image.onload = function () {
-	    document.body.removeChild(image);
-	    callback();
-	  };
-	
-	  image.setAttribute('src', imgUrl);
-	};
-	
-	exports.prevDef = prevDef;
-	exports.imgUrl = imgUrl;
-	exports.createThumb = createThumb;
-	exports.createOverlayImgDiv = createOverlayImgDiv;
-	exports.preload = preload;
 
 /***/ },
 /* 28 */
@@ -2116,7 +2116,7 @@ var app =
 	exports.diffChildren = diffChildren;
 	exports.diffNode = diffNode;
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	var _dift = __webpack_require__(243);
 	
@@ -2321,7 +2321,7 @@ var app =
 	});
 	exports.default = createElement;
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	var _setAttribute = __webpack_require__(85);
 	
@@ -2695,7 +2695,7 @@ var app =
 	  , forOf        = __webpack_require__(28)
 	  , $iterDefine  = __webpack_require__(46)
 	  , step         = __webpack_require__(73)
-	  , ID           = __webpack_require__(25)('id')
+	  , ID           = __webpack_require__(26)('id')
 	  , $has         = __webpack_require__(8)
 	  , isObject     = __webpack_require__(3)
 	  , setSpecies   = __webpack_require__(40)
@@ -2874,7 +2874,7 @@ var app =
 	  , forOf             = __webpack_require__(28)
 	  , createArrayMethod = __webpack_require__(33)
 	  , $has              = __webpack_require__(8)
-	  , WEAK              = __webpack_require__(25)('weak')
+	  , WEAK              = __webpack_require__(26)('weak')
 	  , isExtensible      = Object.isExtensible || isObject
 	  , arrayFind         = createArrayMethod(5)
 	  , arrayFindIndex    = createArrayMethod(6)
@@ -3294,7 +3294,7 @@ var app =
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var addToUnscopables = __webpack_require__(24)
+	var addToUnscopables = __webpack_require__(25)
 	  , step             = __webpack_require__(73)
 	  , Iterators        = __webpack_require__(29)
 	  , toIObject        = __webpack_require__(13);
@@ -3342,7 +3342,7 @@ var app =
 	
 	var _setAttribute2 = __webpack_require__(85);
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	var _createElement = __webpack_require__(56);
 	
@@ -3486,7 +3486,7 @@ var app =
 	
 	var _svgAttributeNamespace2 = _interopRequireDefault(_svgAttributeNamespace);
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	var _indexOf = __webpack_require__(244);
 	
@@ -6051,7 +6051,7 @@ var app =
 	
 	var _marked2 = _interopRequireDefault(_marked);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(23);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6097,12 +6097,23 @@ var app =
 	
 	var _Overlay2 = _interopRequireDefault(_Overlay);
 	
+	var _helpers = __webpack_require__(23);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = {
-	  render: function render(_ref) {
+	  onCreate: function onCreate(_ref) {
 	    var context = _ref.context;
-	    var dispatch = _ref.dispatch;
+	
+	    // Preload About image
+	    var rawAboutUrl = 'https://s3.amazonaws.com/www.abarrphoto.com/photos/projects/jfk-house/img001.jpg';
+	    var aboutUrl = (0, _helpers.imgUrl)(rawAboutUrl, context.view.windowWidth, context.view.windowHeight);
+	
+	    (0, _helpers.preload)(aboutUrl);
+	  },
+	  render: function render(_ref2) {
+	    var context = _ref2.context;
+	    var dispatch = _ref2.dispatch;
 	
 	    return (0, _deku.element)(
 	      'div',
@@ -6175,7 +6186,7 @@ var app =
 	
 	var _deku = __webpack_require__(18);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(23);
 	
 	exports.default = {
 	  render: function render(_ref) {
@@ -6213,7 +6224,7 @@ var app =
 	
 	var _action_creators = __webpack_require__(43);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(23);
 	
 	exports.default = {
 	  onCreate: function onCreate() {
@@ -6282,7 +6293,7 @@ var app =
 	
 	var _marked2 = _interopRequireDefault(_marked);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(23);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -6327,7 +6338,7 @@ var app =
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _helpers = __webpack_require__(27);
+	var _helpers = __webpack_require__(23);
 	
 	var _action_creators = __webpack_require__(43);
 	
@@ -7568,7 +7579,7 @@ var app =
 	'use strict';
 	var path      = __webpack_require__(129)
 	  , invoke    = __webpack_require__(37)
-	  , aFunction = __webpack_require__(23);
+	  , aFunction = __webpack_require__(24);
 	module.exports = function(/* ...pargs */){
 	  var fn     = aFunction(this)
 	    , length = arguments.length
@@ -7615,7 +7626,7 @@ var app =
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
 	var anObject  = __webpack_require__(4)
-	  , aFunction = __webpack_require__(23)
+	  , aFunction = __webpack_require__(24)
 	  , SPECIES   = __webpack_require__(5)('species');
 	module.exports = function(O, D){
 	  var C = anObject(O).constructor, S;
@@ -7655,7 +7666,7 @@ var app =
 	  , invoke            = __webpack_require__(37)
 	  , fails             = __webpack_require__(7)
 	  , anObject          = __webpack_require__(4)
-	  , aFunction         = __webpack_require__(23)
+	  , aFunction         = __webpack_require__(24)
 	  , isObject          = __webpack_require__(3)
 	  , toObject          = __webpack_require__(21)
 	  , toIObject         = __webpack_require__(13)
@@ -7663,7 +7674,7 @@ var app =
 	  , toIndex           = __webpack_require__(31)
 	  , toLength          = __webpack_require__(9)
 	  , IObject           = __webpack_require__(38)
-	  , IE_PROTO          = __webpack_require__(25)('__proto__')
+	  , IE_PROTO          = __webpack_require__(26)('__proto__')
 	  , createArrayMethod = __webpack_require__(33)
 	  , arrayIndexOf      = __webpack_require__(60)(false)
 	  , ObjectProto       = Object.prototype
@@ -7929,7 +7940,7 @@ var app =
 	
 	$export($export.P, 'Array', {copyWithin: __webpack_require__(121)});
 	
-	__webpack_require__(24)('copyWithin');
+	__webpack_require__(25)('copyWithin');
 
 /***/ },
 /* 135 */
@@ -7940,7 +7951,7 @@ var app =
 	
 	$export($export.P, 'Array', {fill: __webpack_require__(122)});
 	
-	__webpack_require__(24)('fill');
+	__webpack_require__(25)('fill');
 
 /***/ },
 /* 136 */
@@ -7959,7 +7970,7 @@ var app =
 	    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
-	__webpack_require__(24)(KEY);
+	__webpack_require__(25)(KEY);
 
 /***/ },
 /* 137 */
@@ -7978,7 +7989,7 @@ var app =
 	    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
-	__webpack_require__(24)(KEY);
+	__webpack_require__(25)(KEY);
 
 /***/ },
 /* 138 */
@@ -8732,7 +8743,7 @@ var app =
 	  , $export    = __webpack_require__(1)
 	  , isObject   = __webpack_require__(3)
 	  , anObject   = __webpack_require__(4)
-	  , aFunction  = __webpack_require__(23)
+	  , aFunction  = __webpack_require__(24)
 	  , strictNew  = __webpack_require__(41)
 	  , forOf      = __webpack_require__(28)
 	  , setProto   = __webpack_require__(51).set
@@ -9034,7 +9045,7 @@ var app =
 	// 26.1.2 Reflect.construct(target, argumentsList [, newTarget])
 	var $         = __webpack_require__(2)
 	  , $export   = __webpack_require__(1)
-	  , aFunction = __webpack_require__(23)
+	  , aFunction = __webpack_require__(24)
 	  , anObject  = __webpack_require__(4)
 	  , isObject  = __webpack_require__(3)
 	  , bind      = Function.bind || __webpack_require__(20).Function.prototype.bind;
@@ -9638,7 +9649,7 @@ var app =
 	  , $fails         = __webpack_require__(7)
 	  , shared         = __webpack_require__(78)
 	  , setToStringTag = __webpack_require__(30)
-	  , uid            = __webpack_require__(25)
+	  , uid            = __webpack_require__(26)
 	  , wks            = __webpack_require__(5)
 	  , keyOf          = __webpack_require__(125)
 	  , $names         = __webpack_require__(66)
@@ -9935,7 +9946,7 @@ var app =
 	  }
 	});
 	
-	__webpack_require__(24)('includes');
+	__webpack_require__(25)('includes');
 
 /***/ },
 /* 220 */
@@ -10547,7 +10558,7 @@ var app =
 	});
 	exports.renderString = renderString;
 	
-	var _element = __webpack_require__(26);
+	var _element = __webpack_require__(27);
 	
 	/**
 	 * Turn an object of key/value pairs into a HTML attribute string. This
