@@ -75,7 +75,7 @@ const createOverlayImgDiv = (dispatch, loadedOverlayImages, width, height, origi
 
 const preload = (imgUrl, callback) => {
 
-  const image = document.createElement('img')
+  let image = document.createElement('img')
   image.style = 'position: absolute; left: -1000px; height: 1px; width: 1px;'
   document.body.appendChild(image)
 
