@@ -18,7 +18,7 @@
   "homepage": "https://github.com/bbarr/abarrphoto#readme",
   "dependencies": {
     "aws-sdk": "^2.2.32",
-    "axios": "^0.9.1",
+    "axios": "^0.19.0",
     "babel-polyfill": "^6.3.14",
     "classnames": "^2.2.3",
     "deku": "^2.0.0-rc14",
