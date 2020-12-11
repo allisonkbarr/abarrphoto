@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+  <sidebar class="sidebar">
+    <h1 class="text-3xl font-light uppercase tracking-wider">Andrew Barr</h1>
+    <h2 class="italic text-gray-800 mt-4 mb-8">Architectural photography and historic documentation</h2>
+    <nav>
+      <a href="/" class="active">Portfolio</a>
+      <a class="pb-4 block" href="/commissions">Commissions</a>
+      <a href="/blog">Blog</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+  </sidebar>
+  <div class="content">
+    {% block content %}{% endblock content %}
+  </div>
+</body>
+</html>

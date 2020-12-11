@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+
+.sidebar {
+  @apply fixed top-0 left-0 p-10;
+  width: 300px;
+}
+
+.content {
+  @apply p-10;
+  margin-left: 300px;
+}
+
+.sidebar nav a {
+  @apply block text-lg mb-2 font-light;
+}
+
+.admin-thumb {
+  @apply p-10;
+  width: 50%;
+}
+
+.admin-thumb img {
+}
+
+.thumb {
+  @apply p-2 block;
+  width: 50%;
+}
+
+.thumb:hover {
+  opacity: .9;
+  cursor: pointer;
+}
+
+#gallery {
+  @apply fixed left-0 top-0 right-0 bottom-0 bg-white z-10;
+}
+
+#gallery a {
+  min-width: 9rem;
+  width: 10%;
+  position: relative;
+  z-index: 11;
+}
+
+#gallery button {
+  @apply fixed top-0 right-0 mt-5 mr-5 py-4 px-8 border border-gray-400 rounded z-20;
+}
+
+.image-container {
+  @apply absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center mx-36;
+}
+
+.image-container img {
+  transition: opacity .2s ease-in-out;
+}
+
+
+
+@tailwind utilities;
