@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 
+body {
+  background-color: #d0d3d4;
+}
+
 .sidebar {
   @apply fixed top-0 left-0 p-10;
   width: 300px;

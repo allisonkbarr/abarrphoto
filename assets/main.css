@@ -580,6 +580,10 @@ video {
   }
 }
 
+body {
+  background-color: #d0d3d4;
+}
+
 .sidebar {
   padding: 2.5rem;
   position: fixed;
