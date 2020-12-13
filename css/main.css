@@ -28,7 +28,7 @@ body {
 }
 
 .thumb {
-  @apply p-2 block;
+  @apply p-10 block;
   width: 50%;
 }
 
@@ -58,6 +58,9 @@ body {
 
 .image-container img {
   transition: opacity .2s ease-in-out;
+  max-height: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 

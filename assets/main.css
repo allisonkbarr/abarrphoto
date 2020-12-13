@@ -615,7 +615,7 @@ body {
 
 .thumb {
   display: block;
-  padding: 0.5rem;
+  padding: 2.5rem;
   width: 50%;
 }
 
@@ -674,6 +674,9 @@ body {
 
 .image-container img {
   transition: opacity .2s ease-in-out;
+  max-height: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .space-y-0 > :not([hidden]) ~ :not([hidden]) {
