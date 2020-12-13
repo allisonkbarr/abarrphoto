@@ -9,7 +9,7 @@
 <div x-data="state()">
   <form @submit.prevent="submit()">
     <input type="file" x-ref="fileInput" @change="file=$refs.fileInput.files[0]">
-    <!--<input type="text" placeholder="caption" @model="caption">-->
+    <input type="text" placeholder="caption" @model="caption">
     <button>Upload</button>
   </form>
   <div class="flex">
@@ -22,12 +22,14 @@
   </div>
 </div>
 
+<script src="/smartcrop.js"></script>
+<script src="/cropper.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js"></script>
 <script>
   function state() {
     return {
       file: null,
-      //caption: '',
+      caption: '',
       async deleteImage(id) {
         await fetch(`/api/delete-image/${id}`, {
           method: 'post'
@@ -35,70 +37,30 @@
         window.location.reload()
       },
       async submit() {
-        const img = await new Promise(res => {
-          const reader = new window.FileReader
-          const img = new Image
-          reader.onload = e => {
-            img.src = e.target.result
-            res(img)
-          }
-          reader.readAsDataURL(this.file)
+        debugger
+        resize(this.file, {
+          outputFormat: 'canvas',
+          targetWidth: 800,
+          targetHeight: 800,
+          crop: true
+        }, (err, canvas) => {
+          debugger
+          canvas.toBlob(blob => {
+            const fd = new FormData()
+            fd.append('image', this.file)
+            fd.append('thumb', blob)
+            fd.append('caption', this.caption)
+            fetch('/api/add-image', {
+              method: 'post',
+              body: fd
+            }).then(() => {
+              window.location.reload()
+            })
+          }, 'image/jpeg', 1)
         })
-        const thumb = await crop(img, 1)
-        const fd = new FormData()
-        fd.append('image', this.file)
-        fd.append('thumb', thumb)
-        //fd.append('caption', this.caption)
-        await fetch('/api/add-image', {
-          method: 'post',
-          body: fd
-        })
-        window.location.reload()
       }
     }
   }
-
-function crop(inputImage, aspectRatio) {
-
-  return new Promise(resolve => {
-
-    // let's store the width and height of our image
-    const inputWidth = inputImage.naturalWidth;
-    const inputHeight = inputImage.naturalHeight;
-
-    // get the aspect ratio of the input image
-    const inputImageAspectRatio = inputWidth / inputHeight;
-
-    // if it's bigger than our target aspect ratio
-    let outputWidth = inputWidth;
-    let outputHeight = inputHeight;
-    if (inputImageAspectRatio > aspectRatio) {
-      outputWidth = inputHeight * aspectRatio;
-    } else if (inputImageAspectRatio < aspectRatio) {
-      outputHeight = inputWidth / aspectRatio;
-    }
-
-    outputWidth = outputWidth > 800 ? 800 : outputWidth
-    outputHeight = outputHeight > 800 ? 800 : outputHeight
-
-    // calculate the position to draw the image at
-    const outputX = (outputWidth - inputWidth) * .5;
-    const outputY = (outputHeight - inputHeight) * .5;
-
-    // create a canvas that will present the output image
-    const outputImage = document.createElement('canvas');
-
-    // set it to the same size as the image
-    outputImage.width = outputWidth;
-    outputImage.height = outputHeight;
-
-    // draw our image at position 0, 0 on the canvas
-    const ctx = outputImage.getContext('2d');
-    ctx.drawImage(inputImage, outputX, outputY);
-
-    outputImage.toBlob(resolve, 'image/jpeg', 1);
-  })
-}
 
 </script>
 </body> 

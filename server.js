@@ -48,7 +48,7 @@ app.post('/api/delete-image/:id', async (req, res) => {
 
 app.post('/api/add-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 } }), async (req, res) => {
   const { image, thumb } = req.files
-  //const { caption } = req.body
+  const { caption } = req.body
   const id = nanoid()
   const fileName = `${id}.jpg`
   const thumbFileName = `${id}_thumb.jpg`
@@ -56,7 +56,7 @@ app.post('/api/add-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 }
   thumb.mv(`${process.env.IMAGE_DIR}/${thumbFileName}`)
   addImage.run({
     id,
-    //caption,
+    caption,
     created_at: Date.now()
   })
   res.sendStatus(200)
