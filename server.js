@@ -80,6 +80,8 @@ app.get('/', async (req, res) => {
 
   const images = getImagesByCategory.all('')
   const categories = getCategories.all().map(obj => obj.category)
+  if (!images.length)
+    return res.redirect(`/gallery/${categories[0]}`)
 
   res.render('index.liquid', { env: process.env, images, categories })
 })
