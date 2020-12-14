@@ -1,10 +1,10 @@
 {% layout 'layout.liquid' %}
 
 {% block content %}
-<div class="flex" id="thumbs">
+<div class="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" id="thumbs">
   {% for image in images %}
     <a href="#" class="thumb" id="{{ image.id }}">
-      <img id="{{ image.id }}" src="/images/{{ image.id }}_thumb.jpg" />
+      <img alt="{{ image.caption }}" id="{{ image.id }}" src="/images/{{ image.id }}_thumb.jpg" />
     </a>
   {% endfor %}
 </div>
@@ -21,6 +21,7 @@
     <div class="image-container">
       <img />
     </div>
+    <div class="fixed bottom-0 left-0 right-0 p-8 pb-12 text-center caption"></div>
   </div>
   <a href="#" class="text-3xl h-full flex justify-center items-center">
     &rarr;
@@ -31,6 +32,7 @@
   const thumbContainer = document.getElementById('thumbs')
   const thumbs = [].slice.call(thumbContainer.querySelectorAll('a'))
   const gallery = document.getElementById('gallery')
+  const caption = document.querySelector('.caption')
   const [ galleryImageA, galleryImageB ] = gallery.querySelectorAll('img')
   const [ prev, next ] = gallery.querySelectorAll('a')
   let currentId
@@ -84,8 +86,13 @@
     } else {
       prev.classList.add('hidden')
     }
+    caption.innerHTML = getCaption(id)
   }
 
+  function getCaption(id) {
+    const thumb = thumbs.find(thumb => thumb.id === id)
+    return thumb.getElementsByTagName('img')[0].getAttribute('alt')
+  }
   function getNextId(id) {
     const nextThumb = thumbs.find((thumb, i) => thumbs[i - 1] && thumbs[i - 1].id === id)
     return nextThumb && nextThumb.id

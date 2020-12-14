@@ -19,22 +19,37 @@ body {
   @apply block text-lg mb-2 font-light;
 }
 
-.admin-thumb {
-  @apply p-10;
-  width: 50%;
-}
-
-.admin-thumb img {
-}
-
 .thumb {
-  @apply p-10 block;
-  width: 50%;
+  @apply block;
 }
 
 .thumb:hover {
   opacity: .9;
   cursor: pointer;
+}
+
+input, textarea {
+  @apply px-2 py-1;
+}
+
+#contact {
+  max-width: 600px;
+}
+
+#contact input, #contact textarea {
+  @apply w-full px-2 py-2 border border-gray-300 rounded;
+}
+
+label {
+  @apply block mb-2;
+}
+
+button {
+  @apply border border-gray-800 px-4 py-2 rounded;
+}
+
+.field {
+  @apply py-4;
 }
 
 #gallery {
@@ -53,7 +68,11 @@ body {
 }
 
 .image-container {
-  @apply absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center mx-36;
+  @apply absolute top-0 right-0 bottom-0 left-0 flex justify-center items-center mx-36 my-36;
+}
+
+.caption {
+  background: rgba(255, 255, 255, .6);
 }
 
 .image-container img {

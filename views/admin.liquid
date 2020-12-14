@@ -6,22 +6,39 @@
   <link href="/main.css" rel="stylesheet">
 </head>
 <body>
-<div x-data="state()">
-  <form @submit.prevent="submit()">
-    <input type="file" x-ref="fileInput" @change="file=$refs.fileInput.files[0]">
-    <input type="text" placeholder="caption" @model="caption">
+<div x-data="state()" class="p-8">
+  <form @submit.prevent="submit()" class="p-5 border border-black">
+    <h2 class="text-lg font-bold">Add image</h2>
+    <div class="field">
+      <label>Image</label>
+      <input type="file" x-ref="fileInput" @change="file=$refs.fileInput.files[0]">
+    </div>
+    <div class="field">
+      <label>Caption</label>
+      <textarea type="text" placeholder="caption" x-model="caption"></textarea>
+    </div>
+    <div class="field">
+      <label>Category</label>
+      <input type="text" x-model="customCategory">
+      <div>Or select from one of the existing categories:</div>
+      <select x-model="existingCategory">
+        <option value="">--</option>
+        {% for cat in categories %}
+          <option value="{{ cat }}">{{ cat }}</option>
+        {% endfor %}
+      </select>
+    </div>
     <button>Upload</button>
   </form>
-  <div class="flex">
+  <div class="p-10 grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
     {% for image in images %}
-      <div class="admin-thumb">
+      <div>
         <button @click.prevent="deleteImage('{{ image.id }}')">Delete</button>
         <img class="w-full" src="/images/{{ image.id }}_thumb.jpg">
       </div>
     {% endfor %}
   </div>
 </div>
-
 <script src="/smartcrop.js"></script>
 <script src="/cropper.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js"></script>
@@ -30,6 +47,8 @@
     return {
       file: null,
       caption: '',
+      existingCategory: '',
+      customCategory: '',
       async deleteImage(id) {
         await fetch(`/api/delete-image/${id}`, {
           method: 'post'
@@ -37,18 +56,19 @@
         window.location.reload()
       },
       async submit() {
-        debugger
         resize(this.file, {
           outputFormat: 'canvas',
           targetWidth: 800,
           targetHeight: 800,
           crop: true
         }, (err, canvas) => {
-          debugger
           canvas.toBlob(blob => {
             const fd = new FormData()
+            const cat = this.existingCategory || this.customCategory
+            debugger
             fd.append('image', this.file)
             fd.append('thumb', blob)
+            fd.append('category', cat.toLowerCase())
             fd.append('caption', this.caption)
             fetch('/api/add-image', {
               method: 'post',

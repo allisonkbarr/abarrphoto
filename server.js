@@ -20,7 +20,9 @@ const jwtVerifyP = promisify(jwt.verify)
 const engine = new Liquid()
 
 const getImages = db.prepare('select * from image')
-const addImage = db.prepare('insert into image (id, caption, created_at) values (@id, @caption, @created_at)')
+const getImagesByCategory = db.prepare('select * from image where category = ?')
+const getCategories = db.prepare(`select distinct category from image where category is not ''`)
+const addImage = db.prepare('insert into image (id, caption, category, created_at) values (@id, @caption, @category, @created_at)')
 const deleteImageById = db.prepare('delete from image where id=?')
 const getImageById = db.prepare('select * from image where id=?')
 
@@ -35,7 +37,8 @@ app.use(express.static('assets'))
 
 app.get('/admin', basicAuth({ challenge: true, users: { andrew: 'myphotographsarethebest' } }), async (req, res) => {
   const images = getImages.all()
-  res.render('admin.liquid', { env: process.env, images })
+  const categories = getCategories.all().map(obj => obj.category)
+  res.render('admin.liquid', { env: process.env, images, categories })
 })
 
 app.post('/api/delete-image/:id', async (req, res) => {
@@ -48,7 +51,7 @@ app.post('/api/delete-image/:id', async (req, res) => {
 
 app.post('/api/add-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 } }), async (req, res) => {
   const { image, thumb } = req.files
-  const { caption } = req.body
+  const { caption, category } = req.body
   const id = nanoid()
   const fileName = `${id}.jpg`
   const thumbFileName = `${id}_thumb.jpg`
@@ -57,16 +60,36 @@ app.post('/api/add-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 }
   addImage.run({
     id,
     caption,
+    category,
     created_at: Date.now()
   })
   res.sendStatus(200)
 })
 
+app.get('/about', async (req, res) => {
+  const categories = getCategories.all().map(obj => obj.category)
+  res.render('about.liquid', { categories })
+})
+
+app.get('/contact', async (req, res) => {
+  const categories = getCategories.all().map(obj => obj.category)
+  res.render('contact.liquid', { categories })
+})
+
 app.get('/', async (req, res) => {
 
-  const images = getImages.all()
+  const images = getImagesByCategory.all('')
+  const categories = getCategories.all().map(obj => obj.category)
 
-  res.render('index.liquid', { env: process.env, images })
+  res.render('index.liquid', { env: process.env, images, categories })
+})
+
+app.get('/gallery/:category', async (req, res) => {
+
+  const images = getImagesByCategory.all(req.params.category)
+  const categories = getCategories.all().map(obj => obj.category)
+
+  res.render('index.liquid', { env: process.env, images, categories })
 })
 
 app.listen(process.env.PORT)

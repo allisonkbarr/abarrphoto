@@ -605,23 +605,57 @@ body {
   margin-bottom: 0.5rem;
 }
 
-.admin-thumb {
-  padding: 2.5rem;
-  width: 50%;
-}
-
-.admin-thumb img {
-}
-
 .thumb {
   display: block;
-  padding: 2.5rem;
-  width: 50%;
 }
 
 .thumb:hover {
   opacity: .9;
   cursor: pointer;
+}
+
+input, textarea {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+#contact {
+  max-width: 600px;
+}
+
+#contact input, #contact textarea {
+  --tw-border-opacity: 1;
+  border-color: rgba(209, 213, 219, var(--tw-border-opacity));
+  border-radius: 0.25rem;
+  border-width: 1px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  width: 100%;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+button {
+  --tw-border-opacity: 1;
+  border-color: rgba(31, 41, 55, var(--tw-border-opacity));
+  border-radius: 0.25rem;
+  border-width: 1px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.field {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 #gallery {
@@ -663,6 +697,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 9rem;
+  margin-bottom: 9rem;
   margin-left: 9rem;
   margin-right: 9rem;
   position: absolute;
@@ -670,6 +706,10 @@ body {
   right: 0px;
   bottom: 0px;
   left: 0px;
+}
+
+.caption {
+  background: rgba(255, 255, 255, .6);
 }
 
 .image-container img {

@@ -11,8 +11,13 @@
     <h2 class="italic text-gray-800 mt-4 mb-8">Architectural photography and historic documentation</h2>
     <nav>
       <a href="/" class="active">Portfolio</a>
-      <a class="pb-4 block" href="/commissions">Commissions</a>
-      <a href="/blog">Blog</a>
+      <div class="pl-6 pb-4">
+        {% for cat in categories %}
+          <a href="/gallery/{{ cat }}">{{ cat | capitalize }}</a>
+        {% endfor %}
+      </div>
+      <!--<a class="pb-4 block" href="/commissions">Commissions</a>-->
+      <a target="_blank" href="https://blog.abarrphoto.com">Blog</a>
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
