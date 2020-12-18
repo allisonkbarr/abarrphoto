@@ -34,6 +34,7 @@
     {% for image in images %}
       <div>
         <button @click.prevent="deleteImage('{{ image.id }}')">Delete</button>
+        <a href="/admin/edit/{{ image.id }}">Edit</a>
         <img class="w-full" src="/images/{{ image.id }}_thumb.jpg">
       </div>
     {% endfor %}

@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="/main.css" rel="stylesheet">
+</head>
+<body>
+<div x-data="state()" class="p-8">
+  <div class="flex">
+    <form @submit.prevent="submit()" class="p-5 border border-black flex-1">
+      <h2 class="text-lg font-bold">Edit image</h2>
+      <div class="field">
+        <label>New File</label>
+        <input type="file" x-ref="fileInput" @change="file=$refs.fileInput.files[0]">
+      </div>
+      <div class="field">
+        <label>Caption</label>
+        <textarea type="text" placeholder="caption" x-model="caption"></textarea>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <input type="text" x-model="customCategory">
+        <div>Or select from one of the existing categories:</div>
+        <select x-model="existingCategory">
+          <option value="">--</option>
+          {% for cat in categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button>Update</button>
+    </form>
+    <img src="/images/{{ image.id }}.jpg" class="flex-1" style="width: 50%">
+  </div>
+  <div class="p-10 grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+    {% for image in images %}
+      <div>
+        <button @click.prevent="deleteImage('{{ image.id }}')">Delete</button>
+        <img class="w-full" src="/images/{{ image.id }}_thumb.jpg">
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script src="/smartcrop.js"></script>
+<script src="/cropper.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.3/dist/alpine.min.js"></script>
+<script>
+  function state() {
+    return {
+      file: null,
+      caption: '{{ image.caption }}',
+      existingCategory: '{{ image.category }}',
+      customCategory: '',
+      async deleteImage(id) {
+        await fetch(`/api/delete-image/${id}`, {
+          method: 'post'
+        })
+        window.location.reload()
+      },
+      async submit() {
+        const blob = this.file && await new Promise(res => {
+          resize(this.file, {
+            outputFormat: 'canvas',
+            targetWidth: 800,
+            targetHeight: 800,
+            crop: true
+          }, (err, canvas) => {
+            canvas.toBlob(res, 'image/jpeg', 1)
+          })
+        })
+
+        const fd = new FormData()
+        const cat = this.customCategory || this.existingCategory
+
+        if (this.file && blob) {
+          fd.append('image', this.file)
+          fd.append('thumb', blob)
+        }
+
+        fd.append('category', cat.toLowerCase())
+        fd.append('caption', this.caption)
+        fd.append('id', '{{ image.id }}')
+
+        fetch('/api/edit-image', {
+          method: 'post',
+          body: fd
+        }).then(() => {
+          window.location.href = '/admin'
+        })
+      }
+    }
+  }
+
+</script>
+</body> 
+</html>

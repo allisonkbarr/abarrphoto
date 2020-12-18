@@ -25,6 +25,7 @@ const getCategories = db.prepare(`select distinct category from image where cate
 const addImage = db.prepare('insert into image (id, caption, category, created_at) values (@id, @caption, @category, @created_at)')
 const deleteImageById = db.prepare('delete from image where id=?')
 const getImageById = db.prepare('select * from image where id=?')
+const updateImage = db.prepare('update image set category=@category, caption=@caption where id=@id')
 
 const app = express()
 
@@ -41,11 +42,35 @@ app.get('/admin', basicAuth({ challenge: true, users: { andrew: 'myphotographsar
   res.render('admin.liquid', { env: process.env, images, categories })
 })
 
+app.get('/admin/edit/:id', basicAuth({ challenge: true, users: { andrew: 'myphotographsarethebest' } }), async (req, res) => {
+  const image = getImageById.get(req.params.id)
+  const categories = getCategories.all().map(obj => obj.category)
+  res.render('edit.liquid', { env: process.env, image, categories })
+})
+
 app.post('/api/delete-image/:id', async (req, res) => {
   const { id } = req.params
   deleteImageById.run(id)
   fs.unlinkSync(`${process.env.IMAGE_DIR}/${id}.jpg`)
   fs.unlinkSync(`${process.env.IMAGE_DIR}/${id}_thumb.jpg`)
+  res.sendStatus(200)
+})
+
+app.post('/api/edit-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 } }), async (req, res) => {
+
+  const { image, thumb } = req.files || {}
+  const { id, caption, category } = req.body
+  console.log('id', id, caption, category)
+
+  if (image && thumb) {
+    fs.unlinkSync(`${process.env.IMAGE_DIR}/${id}.jpg`)
+    fs.unlinkSync(`${process.env.IMAGE_DIR}/${id}_thumb.jpg`)
+    image.mv(`${process.env.IMAGE_DIR}/${id}.jpg`)
+    thumb.mv(`${process.env.IMAGE_DIR}/${id}_thumb.jpg`)
+  }
+
+  updateImage.run({ id, caption, category })
+
   res.sendStatus(200)
 })
 
