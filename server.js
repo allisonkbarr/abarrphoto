@@ -26,6 +26,7 @@ const addImage = db.prepare('insert into image (id, caption, category, created_a
 const deleteImageById = db.prepare('delete from image where id=?')
 const getImageById = db.prepare('select * from image where id=?')
 const updateImage = db.prepare('update image set category=@category, caption=@caption where id=@id')
+const getRandomImage = db.prepare('select * from image where category is not null order by random() limit 1')
 
 const app = express()
 
@@ -103,12 +104,10 @@ app.get('/contact', async (req, res) => {
 
 app.get('/', async (req, res) => {
 
-  const images = getImagesByCategory.all('')
+  const image = getRandomImage.get()
   const categories = getCategories.all().map(obj => obj.category)
-  if (!images.length)
-    return res.redirect(`/gallery/${categories[0]}`)
 
-  res.render('index.liquid', { env: process.env, images, categories })
+  res.render('index.liquid', { env: process.env, image, categories })
 })
 
 app.get('/gallery/:category', async (req, res) => {
@@ -116,7 +115,7 @@ app.get('/gallery/:category', async (req, res) => {
   const images = getImagesByCategory.all(req.params.category)
   const categories = getCategories.all().map(obj => obj.category)
 
-  res.render('index.liquid', { env: process.env, images, categories })
+  res.render('gallery.liquid', { env: process.env, images, categories })
 })
 
 app.listen(process.env.PORT)

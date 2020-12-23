@@ -1,0 +1,107 @@
+{% layout 'layout.liquid' %}
+
+{% block content %}
+<div class="grid grid-cols-2 gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" id="thumbs">
+  {% for image in images %}
+    <a href="#" class="thumb" id="{{ image.id }}">
+      <img alt="{{ image.caption }}" id="{{ image.id }}" src="/images/{{ image.id }}_thumb.jpg" />
+    </a>
+  {% endfor %}
+</div>
+
+<div id="gallery" class="hidden flex items-center justify-center">
+  <button>Close</button>
+  <a href="#" class="text-3xl h-full flex justify-center items-center">
+    &larr;
+  </a>
+  <div class="w-full">
+    <div class="image-container">
+      <img />
+    </div>
+    <div class="image-container">
+      <img />
+    </div>
+    <div class="fixed bottom-0 left-0 right-0 p-8 pb-12 text-center caption"></div>
+  </div>
+  <a href="#" class="text-3xl h-full flex justify-center items-center">
+    &rarr;
+  </a>
+</div>
+
+<script>
+  const thumbContainer = document.getElementById('thumbs')
+  const thumbs = [].slice.call(thumbContainer.querySelectorAll('a'))
+  const gallery = document.getElementById('gallery')
+  const caption = document.querySelector('.caption')
+  const [ galleryImageA, galleryImageB ] = gallery.querySelectorAll('img')
+  const [ prev, next ] = gallery.querySelectorAll('a')
+  let currentId
+  let currentGalleryImage = galleryImageA
+  thumbContainer.addEventListener('click', e => {
+    e.preventDefault()
+    let { target } = e
+    if (target.tagName !== 'A') target = target.closest('a')
+    show(target.getAttribute('id'))
+  })
+  gallery.addEventListener('click', e => {
+    if (e.target === prev) {
+      const prevId = getPrevId(currentId)
+      show(prevId, true)
+    } else if (e.target === next) {
+      const nextId = getNextId(currentId)
+      show(nextId, true)
+    } else if (e.target.tagName === 'BUTTON') {
+      hide()
+    } 
+  })
+  function hide() {
+    gallery.classList.add('hidden')
+    thumbContainer.classList.remove('hidden')
+  }
+  function show(id, transition=false) {
+    gallery.classList.remove('hidden')  
+    thumbContainer.classList.add('hidden')
+    currentId = id
+    if (transition) {
+      const a = currentGalleryImage === galleryImageA ? galleryImageA : galleryImageB
+      const b = currentGalleryImage === galleryImageA ? galleryImageB : galleryImageA
+      b.src = `/images/${id}.jpg`
+      b.onload = () => {
+        a.style.opacity = 0
+        b.style.opacity = 1
+      }
+      currentGalleryImage = b
+    } else {
+      galleryImageA.opacity = 1;
+      galleryImageB.opacity = 0;
+      galleryImageA.src = `/images/${id}.jpg`
+    }
+    if (getNextId(currentId)) {
+      next.classList.remove('hidden')
+    } else {
+      next.classList.add('hidden')
+    }
+    if (getPrevId(currentId)) {
+      prev.classList.remove('hidden')
+    } else {
+      prev.classList.add('hidden')
+    }
+    caption.innerHTML = getCaption(id)
+  }
+
+  function getCaption(id) {
+    const thumb = thumbs.find(thumb => thumb.id === id)
+    return thumb.getElementsByTagName('img')[0].getAttribute('alt')
+  }
+  function getNextId(id) {
+    const nextThumb = thumbs.find((thumb, i) => thumbs[i - 1] && thumbs[i - 1].id === id)
+    return nextThumb && nextThumb.id
+  }
+
+  function getPrevId(id) {
+    const prevThumb = thumbs.find((thumb, i) => thumbs[i + 1] && thumbs[i + 1].id === id)
+    return prevThumb && prevThumb.id
+  }
+
+</script>
+{% endblock %}

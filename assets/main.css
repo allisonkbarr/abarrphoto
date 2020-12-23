@@ -581,7 +581,7 @@ video {
 }
 
 body {
-  background-color: #f3f3f3;
+  background-color: #cacaca;
 }
 
 .sidebar {
@@ -589,12 +589,22 @@ body {
   position: fixed;
   top: 0px;
   left: 0px;
-  width: 300px;
+  width: 320px;
 }
 
 .content {
   padding: 2.5rem;
-  margin-left: 300px;
+  margin-left: 320px;
+}
+
+.big-image-container img {
+  height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+  width: 100%;
+  max-height: calc(100vh - 5rem);
+  -o-object-position: left center;
+     object-position: left center;
 }
 
 .sidebar nav a {

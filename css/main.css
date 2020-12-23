@@ -2,17 +2,23 @@
 @tailwind components;
 
 body {
-  background-color: #f3f3f3;
+  background-color: #cacaca;
 }
 
 .sidebar {
   @apply fixed top-0 left-0 p-10;
-  width: 300px;
+  width: 320px;
 }
 
 .content {
   @apply p-10;
-  margin-left: 300px;
+  margin-left: 320px;
+}
+
+.big-image-container img {
+  @apply object-contain h-full w-full;
+  max-height: calc(100vh - 5rem);
+  object-position: left center;
 }
 
 .sidebar nav a {
