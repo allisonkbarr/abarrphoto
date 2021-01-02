@@ -1,5 +1,8 @@
 module.exports = {
-  purge: [],
+  purge: {
+    enabled: true,
+    content: ['./views/*.liquid']
+  },
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
