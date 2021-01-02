@@ -593,17 +593,74 @@ h1 {
   padding: 2.5rem;
   position: fixed;
   top: 0px;
+  bottom: 0px;
   left: 0px;
+  background: #cacaca;
   width: 320px;
 }
 
-.sidebar a.active {
-  text-decoration: underline;
+header {
+  display: none;
 }
 
 .content {
   padding: 2.5rem;
   margin-left: 320px;
+}
+
+.about {
+  margin-top: 53px;
+}
+
+p {
+  margin-bottom: 1rem;
+  max-width: 700px;
+}
+
+@media (max-width: 640px) {
+  .about {
+    margin-top: 0px;
+  }
+
+  .sidebar {
+    transition: transform .5s ease-in-out;
+    transform: translate3d(-320px, 0, 0);
+    margin-top: 60px;
+  }
+
+  .sidebar.open {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .content {
+    margin-left: 0;
+  }
+
+  header {
+    height: 60px;
+  }
+
+  header div {
+    flex: 1;
+  }
+
+  header button {
+    border-style: none;
+    margin-left: 1.25rem;
+  }
+
+  sidebar h1, sidebar h2 {
+    display: none;
+  }
+
+  body .image-container {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+}
+
+.sidebar a.active {
+  text-decoration: underline;
 }
 
 .big-image-container img {

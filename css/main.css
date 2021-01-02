@@ -11,17 +11,62 @@ h1 {
 }
 
 .sidebar {
-  @apply fixed top-0 left-0 p-10;
+  @apply fixed top-0 left-0 p-10 bottom-0;
+  background: #cacaca;
   width: 320px;
+}
+
+header {
+  display: none;
+}
+.content {
+  @apply p-10;
+  margin-left: 320px;
+}
+
+.about {
+  margin-top: 53px;
+}
+
+p {
+  @apply mb-4;
+  max-width: 700px;
+}
+
+@media (max-width: 640px) {
+  .about {
+    margin-top: 0px;
+  }
+  .sidebar {
+    transition: transform .5s ease-in-out;
+    transform: translate3d(-320px, 0, 0);
+    margin-top: 60px;
+  }
+  .sidebar.open {
+    transform: translate3d(0, 0, 0);
+  }
+  .content {
+    margin-left: 0;
+  }
+  header {
+    height: 60px;
+  }
+  header div {
+    flex: 1;
+  }
+  header button {
+    @apply ml-5 border-none;
+  }
+  sidebar h1, sidebar h2 {
+    display: none;
+  }
+  body .image-container {
+    @apply mx-0;
+  }
 }
 
 .sidebar a.active {
   @apply underline;
-}
-
-.content {
-  @apply p-10;
-  margin-left: 320px;
 }
 
 .big-image-container img {
