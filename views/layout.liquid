@@ -4,16 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="/main.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
 </head>
 <body>
   <sidebar class="sidebar">
-    <h1 class="text-3xl uppercase tracking-wider">Andrew Barr</h1>
-    <h2 class="italic text-gray-800 mt-4 mb-8">Architectural photography and historic documentation</h2>
+    <h1 class="text-3xl uppercase text-center font-black">Andrew Barr</h1>
+    <h2 class="italic text-gray-800 text-center mt-4 mb-10">Architectural Photography and Historic Documentation</h2>
     <nav>
       <a href="/" class="active">Portfolio</a>
       <div class="pl-6 pb-4">
         {% for cat in categories %}
-          <a href="/gallery/{{ cat }}">{{ cat | capitalize }}</a>
+          <a class="{% if category == cat %}active{% endif %}" href="/gallery/{{ cat }}">{{ cat | capitalize }}</a>
         {% endfor %}
       </div>
       <!--<a class="pb-4 block" href="/commissions">Commissions</a>-->

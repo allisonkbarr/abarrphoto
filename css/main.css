@@ -5,9 +5,18 @@ body {
   background-color: #cacaca;
 }
 
+h1 {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.08em;
+}
+
 .sidebar {
   @apply fixed top-0 left-0 p-10;
   width: 320px;
+}
+
+.sidebar a.active {
+  @apply underline;
 }
 
 .content {

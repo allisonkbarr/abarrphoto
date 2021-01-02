@@ -584,12 +584,21 @@ body {
   background-color: #cacaca;
 }
 
+h1 {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.08em;
+}
+
 .sidebar {
   padding: 2.5rem;
   position: fixed;
   top: 0px;
   left: 0px;
   width: 320px;
+}
+
+.sidebar a.active {
+  text-decoration: underline;
 }
 
 .content {
