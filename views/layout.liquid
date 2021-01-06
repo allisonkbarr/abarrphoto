@@ -19,16 +19,16 @@
     <h1 class="text-3xl uppercase text-center font-black">Andrew Barr</h1>
     <h2 class="italic text-gray-800 text-center mt-4 mb-10">Architectural Photography and Historic Documentation</h2>
     <nav>
-      <a href="/" class="active">Portfolio</a>
+      <a class="{% if page == 'home' %}active{% endif %}" href="/">Portfolio</a>
       <div class="pl-6 pb-4">
         {% for cat in categories %}
-          <a class="{% if category == cat %}active{% endif %}" href="/gallery/{{ cat }}">{{ cat | capitalize }}</a>
+          <a class="{% if page == cat %}active{% endif %}" href="/gallery/{{ cat }}">{{ cat | capitalize }}</a>
         {% endfor %}
       </div>
       <!--<a class="pb-4 block" href="/commissions">Commissions</a>-->
       <a target="_blank" href="https://blog.abarrphoto.com">Blog</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
+      <a class="{% if page == 'about' %}active{% endif %}" href="/about">About</a>
+      <a class="{% if page == 'contact' %}active{% endif %}" href="/contact">Contact</a>
     </nav>
   </sidebar>
   <div class="content">

@@ -602,8 +602,8 @@ p {
      object-fit: contain;
   width: 100%;
   max-height: calc(100vh - 5rem);
-  -o-object-position: left center;
-     object-position: left center;
+  -o-object-position: center center;
+     object-position: center center;
 }
 
 .sidebar nav a {

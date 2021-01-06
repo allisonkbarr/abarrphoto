@@ -94,12 +94,12 @@ app.post('/api/add-image', fileUploader({ limits: { fileSize: 50 * 1024 * 1024 }
 
 app.get('/about', async (req, res) => {
   const categories = getCategories.all().map(obj => obj.category)
-  res.render('about.liquid', { categories })
+  res.render('about.liquid', { categories, page: 'about' })
 })
 
 app.get('/contact', async (req, res) => {
   const categories = getCategories.all().map(obj => obj.category)
-  res.render('contact.liquid', { categories })
+  res.render('contact.liquid', { categories, page: 'contact' })
 })
 
 app.get('/', async (req, res) => {
@@ -107,15 +107,17 @@ app.get('/', async (req, res) => {
   const image = getRandomImage.get()
   const categories = getCategories.all().map(obj => obj.category)
 
-  res.render('index.liquid', { env: process.env, image, categories })
+  res.render('index.liquid', { env: process.env, image, categories, page: 'home' })
 })
 
 app.get('/gallery/:category', async (req, res) => {
 
-  const images = getImagesByCategory.all(req.params.category)
+  const category = req.params.category.toLowerCase()
+
+  const images = getImagesByCategory.all(category)
   const categories = getCategories.all().map(obj => obj.category)
 
-  res.render('gallery.liquid', { env: process.env, images, categories })
+  res.render('gallery.liquid', { env: process.env, images, categories, page: category })
 })
 
 app.listen(process.env.PORT)
